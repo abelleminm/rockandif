@@ -1,10 +1,11 @@
 import React from "react";
+import "./Header.css";
 
 function Header() {
     return (
-        <div>
-            <h1>Rock and IF</h1>
-        </div>
+        <header>
+            <h1>header is here</h1>
+        </header>
     );
 }
 

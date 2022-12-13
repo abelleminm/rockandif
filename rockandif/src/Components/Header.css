@@ -1,0 +1,7 @@
+header{
+    background-color: hsl(220, 78%, 48%);
+    position: relative;
+    
+    min-height: 100px;
+    color: white;
+}
