@@ -7,9 +7,7 @@ function GroupPage() {
     <div id="groupPage">
       <Header titre="Group : " />
       <div id="groupPageContent">
-        <div id="photo">
-          <img alt="photo du groupe" />
-        </div>
+        <div id="photo"/>
         <text id="nomGroupe">Nom du groupe</text>
         <text id="date">Date création - Date fin</text>
         <text id="origine">Origine</text>
