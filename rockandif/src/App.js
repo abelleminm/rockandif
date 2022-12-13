@@ -1,5 +1,5 @@
 import './App.css';
-import SearchBar from './SearchBar';
+import SearchBar from './Components/SearchBar';
 import AlbumPage from './Pages/AlbumPage';
 import GroupPage from './Pages/GroupPage';
 import HomePage from './Pages/HomePage';
@@ -11,13 +11,7 @@ function App() {
   return (
     <div className="App">
       <Header />
-      <SearchBar />
-      <HomePage />
-      <AlbumPage />
-      <GroupPage />
-      <PersonPage />
-      <SinglePage />
-
+      <SearchBar placeholder="Search a rock band..."/>
     </div>
   );
 }
