@@ -1,6 +1,7 @@
 import React from 'react';
 import Header from '../Components/Header';
 import './AlbumPage.css';
+import { Link } from 'react-router-dom';
 
 function AlbumPage() {
   return (
@@ -9,7 +10,7 @@ function AlbumPage() {
       <div id="albumPageContent">
         <div id="coverAlbum"/>
         <text id="nomAlbum">Nom de l'album</text>
-        <text id="groupeAlbum">Groupe</text>
+        <Link to="/group" id="groupeAlbum">Groupe</Link>
         <text id="dateAlbum">Date</text>
         <text id="descriptionAlbum">Description</text>
         <text id="writersAlbum">Writers</text>

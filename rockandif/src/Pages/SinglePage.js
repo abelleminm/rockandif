@@ -1,6 +1,7 @@
 import React from 'react';
 import Header from '../Components/Header';
 import './SinglePage.css';
+import { Link } from 'react-router-dom';
 
 function SinglePage() {
   return (
@@ -9,8 +10,8 @@ function SinglePage() {
       <div id="singlePageContent">
         <div id="coverSingle"/>
         <text id="nomSingle">Nom du single</text>
-        <text id="nomAlbumSingle">Nom de l'album</text>
-        <text id="groupeSingle">Groupe</text>
+        <Link to="/album" id="nomAlbumSingle">Nom de l'album</Link>
+        <Link to="/group" id="groupeSingle">Groupe</Link>
         <text id="dateSingle">Date</text>
         <text id="descriptionSingle">Description</text>
         <text id="styleSingle">Style</text>
