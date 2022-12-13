@@ -10,7 +10,7 @@ import Header from './Components/Header';
 function App() {
   return (
     <div className="App">
-      <Header />
+      <Header titre="Welcome to Rock&IF" />
       <SearchBar placeholder="Search a rock band..."/>
     </div>
   );
