@@ -1,10 +1,17 @@
 import React from "react";
 import "./Header.css";
+import logo from "../Images/Logo.PNG";
+import Fab from '@mui/material/Fab';
+import AddIcon from '@mui/icons-material/Add';
 
 function Header() {
     return (
         <header>
-            <h1>header is here</h1>
+            <Fab id="boutonMenu" aria-label="add">
+                Menu
+            </Fab>
+            <h1 id="titre" >Welcome to Rock&IF</h1>
+            <img src={logo} alt="Logo" />
         </header>
     );
 }
