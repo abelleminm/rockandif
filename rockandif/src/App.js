@@ -13,7 +13,7 @@ import FrenchGroupsPage from './Pages/FrenchGroupsPage';
 function App() {
   return (
     <div className="App">
-      <FrenchGroupsPage/>
+      <GroupPage/>
     </div>
   );
 }

@@ -7,16 +7,16 @@ function SinglePage() {
     <div id="singlePage">
       <Header titre="Single : " />
       <div id="singlePageContent">
-        <div id="cover"/>
+        <div id="coverSingle"/>
         <text id="nomSingle">Nom du single</text>
-        <text id="nomAlbum">Nom de l'album</text>
-        <text id="groupe">Groupe</text>
-        <text id="date">Date</text>
-        <text id="description">Description</text>
-        <text id="style">Style</text>
-        <text id="writers">Writers</text>
-        <text id="award">Award</text>
-        <text id="label">Label</text>
+        <text id="nomAlbumSingle">Nom de l'album</text>
+        <text id="groupeSingle">Groupe</text>
+        <text id="dateSingle">Date</text>
+        <text id="descriptionSingle">Description</text>
+        <text id="styleSingle">Style</text>
+        <text id="writersSingle">Writers</text>
+        <text id="awardSingle">Award</text>
+        <text id="labelSingle">Label</text>
       </div>
     </div>
   );

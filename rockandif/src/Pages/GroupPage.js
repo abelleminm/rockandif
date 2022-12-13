@@ -7,16 +7,16 @@ function GroupPage() {
     <div id="groupPage">
       <Header titre="Group : " />
       <div id="groupPageContent">
-        <div id="photo"/>
+        <div id="photoGroup"/>
         <text id="nomGroupe">Nom du groupe</text>
-        <text id="date">Date création - Date fin</text>
-        <text id="origine">Origine</text>
-        <text id="description">Description</text>
-        <text id="membres">Membres</text>
-        <text id="style">Style</text>
-        <text id="singles">Singles</text>
-        <text id="label">Label</text>
-        <text id="albums">Albums</text>
+        <text id="dateGroup">Date création - Date fin</text>
+        <text id="origineGroup">Origine</text>
+        <text id="descriptionGroup">Description</text>
+        <text id="membresGroup">Membres</text>
+        <text id="styleGroup">Style</text>
+        <text id="singlesGroup">Singles</text>
+        <text id="labelGroup">Label</text>
+        <text id="albumsGroup">Albums</text>
       </div>
     </div>
   );

@@ -7,16 +7,16 @@ function AlbumPage() {
     <div id="albumPage">
       <Header titre="Album : " />
       <div id="albumPageContent">
-        <div id="cover"/>
+        <div id="coverAlbum"/>
         <text id="nomAlbum">Nom de l'album</text>
-        <text id="groupe">Groupe</text>
-        <text id="date">Date</text>
-        <text id="description">Description</text>
-        <text id="writers">Writers</text>
-        <text id="singles">Singles</text>
-        <text id="style">Style</text>
-        <text id="award">Award</text>
-        <text id="studio">Studio</text>
+        <text id="groupeAlbum">Groupe</text>
+        <text id="dateAlbum">Date</text>
+        <text id="descriptionAlbum">Description</text>
+        <text id="writersAlbum">Writers</text>
+        <text id="singlesAlbum">Singles</text>
+        <text id="styleAlbum">Style</text>
+        <text id="awardAlbum">Award</text>
+        <text id="studioAlbum">Studio</text>
       </div>
     </div>
   );
