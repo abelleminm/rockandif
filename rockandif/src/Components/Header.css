@@ -19,8 +19,9 @@ img{
     font-size: 50px;
     font-family: "Rock Salt";
     font-style: italic;
-    text-shadow: #ff0000 5px 0px 10px;
+    text-shadow: #ff0000 3px 3px;
 }
+
 
 #boutonMenu{
     background-color: white;
