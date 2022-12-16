@@ -1,0 +1,15 @@
+#boutonMenu{
+   background-color: white;
+    color: #541B1B;
+}
+
+
+#boutonMenu:hover{
+    background-color: #762d2d;
+    color: white;
+}
+
+#header-menu{
+    position : absolute;
+    margin-right: 90%;
+}
