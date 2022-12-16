@@ -2,13 +2,14 @@ import React from 'react';
 import Header from '../Components/Header';
 import './GroupPage.css';
 
-function GroupPage() {
+function GroupPage({nom}) {
+  var titrePage = "Group : "+nom;
   return (
     <div id="groupPage">
-      <Header titre="Group : " />
+      <Header titre={titrePage} />
       <div id="groupPageContent">
         <div id="photoGroup"/>
-        <text id="nomGroupe">Nom du groupe</text>
+        <text id="nomGroupe">{nom}</text>
         <text id="dateGroup">Date création - Date fin</text>
         <text id="origineGroup">Origine</text>
         <text id="descriptionGroup">Description</text>
