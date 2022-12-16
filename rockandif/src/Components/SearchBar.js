@@ -21,9 +21,9 @@ function SearchBar({ placeholder }) {
 
   let reqBand_beg = 'SELECT DISTINCT ?g ?name WHERE {\
     ?g a dbo:Band; dbo:genre ?genre.\
-    ?g dbp:name ?name.\
+    ?g foaf:name ?name.\
     FILTER(langMatches(lang(?name),"en") && regex(?genre, "[Rr]ock") \
-    && langMatches(lang(?abstract),"en") && regex(lcase(str(?name)), "';
+    && regex(lcase(str(?name)), "';
     
   let reqBand_end = '.*"))} ORDER BY ASC(?name) LIMIT 10';
 
@@ -31,9 +31,8 @@ function SearchBar({ placeholder }) {
   const handleFilter = (event) => {
     setWordEntered(event.target.value);
     const searchWord = wordEntered.toLowerCase();
-    console.log(searchWord);
-    setRequest(prefixRq + reqBand_beg + searchWord + reqBand_end);
-    sendRequest(request);
+    // console.log(searchWord);
+    sendRequest(searchWord);
     // const newFilter = data.filter((value) => {
     //   return value.title.toLowerCase().includes(searchWord.toLowerCase());
     // });
@@ -45,10 +44,11 @@ function SearchBar({ placeholder }) {
     // }
   };
 
-  const sendRequest = (requestContent) => {
+  const sendRequest = (word) => {
+    setRequest(prefixRq + reqBand_beg + word + reqBand_end);
     // Encodage de l'URL à transmettre à DBPedia
     var url_base = "http://dbpedia.org/sparql";
-    var url = url_base + "?query=" + encodeURIComponent(requestContent) + "&format=json";
+    var url = url_base + "?query=" + encodeURIComponent(request) + "&format=json";
 
     // Requête HTTP et affichage des résultats
     var xmlhttp = new XMLHttpRequest();
