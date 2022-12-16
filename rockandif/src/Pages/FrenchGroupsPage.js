@@ -11,6 +11,18 @@ function FrenchGroupsPage() {
         <GroupCard nom="Groupe 1" />
         <GroupCard nom="Groupe 2" />
         <GroupCard nom="Groupe 3" />
+        <GroupCard nom="Groupe 4" />
+        <GroupCard nom="Groupe 5" />
+        <GroupCard nom="Groupe 6" />
+        <GroupCard nom="Groupe 7" />
+        <GroupCard nom="Groupe 8" />
+        <GroupCard nom="Groupe 9" />
+        <GroupCard nom="Groupe 10" />
+        <GroupCard nom="Groupe 11" />
+        <GroupCard nom="Groupe 12" />
+        <GroupCard nom="Groupe 13" />
+        <GroupCard nom="Groupe 14" />
+        <GroupCard nom="Groupe 15" />
       </div>
     </div>
   );
