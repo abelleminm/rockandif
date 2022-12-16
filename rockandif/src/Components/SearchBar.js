@@ -6,7 +6,6 @@ import CloseIcon from "@mui/icons-material/Close";
 function SearchBar({ placeholder }) {
   const [filteredResponse, setFilteredResponse] = useState([]);
   const [wordEntered, setWordEntered] = useState("");
-  const [request, setRequest] = useState("");
 
   let prefixRq = 'PREFIX owl: <http://www.w3.org/2002/07/owl#>\n '+
   'PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n '+
@@ -27,28 +26,20 @@ function SearchBar({ placeholder }) {
     
   let reqBand_end = '.*"))} ORDER BY ASC(?name) LIMIT 10';
 
-  {/* handlefilter tries and finds the expression you're seeking in a json file, we need to adapt it to make it send requests to dbpedia!*/}
   const handleFilter = (event) => {
-    setWordEntered(event.target.value);
-    const searchWord = wordEntered.toLowerCase();
-    // console.log(searchWord);
+    let searchWord = event.target.value;
+    console.log("search word : " + searchWord);
+    setWordEntered(searchWord);
+    searchWord = searchWord.toLowerCase();
+    console.log("search word : " + searchWord);
     sendRequest(searchWord);
-    // const newFilter = data.filter((value) => {
-    //   return value.title.toLowerCase().includes(searchWord.toLowerCase());
-    // });
-
-    // if (searchWord === "") {
-    //   setFilteredRequest([]);
-    // } else {
-    //   setFilteredRequest(newFilter);
-    // }
   };
 
   const sendRequest = (word) => {
-    setRequest(prefixRq + reqBand_beg + word + reqBand_end);
+    const request_content = prefixRq + reqBand_beg + word + reqBand_end;
     // Encodage de l'URL à transmettre à DBPedia
     var url_base = "http://dbpedia.org/sparql";
-    var url = url_base + "?query=" + encodeURIComponent(request) + "&format=json";
+    var url = url_base + "?query=" + encodeURIComponent(request_content) + "&format=json";
 
     // Requête HTTP et affichage des résultats
     var xmlhttp = new XMLHttpRequest();
@@ -58,7 +49,7 @@ function SearchBar({ placeholder }) {
           console.log(filteredResponse);
           // afficherResultats(filteredRequest);
         }else{
-          // setFilteredResponse([]);
+          setFilteredResponse([]);
         }
     };
     xmlhttp.open("GET", url, true);
