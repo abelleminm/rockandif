@@ -3,13 +3,14 @@ import Header from '../Components/Header';
 import './SinglePage.css';
 import { Link } from 'react-router-dom';
 
-function SinglePage() {
+function SinglePage({nom}) {
+  var titrePage = "Single : "+nom;
   return (
     <div id="singlePage">
-      <Header titre="Single : " />
+      <Header titre={titrePage} />
       <div id="singlePageContent">
         <div id="coverSingle"/>
-        <text id="nomSingle">Nom du single</text>
+        <text id="nomSingle">{nom}</text>
         <Link to="/album" id="nomAlbumSingle">Nom de l'album</Link>
         <Link to="/group" id="groupeSingle">Groupe</Link>
         <text id="dateSingle">Date</text>

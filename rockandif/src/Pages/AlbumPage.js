@@ -3,13 +3,14 @@ import Header from '../Components/Header';
 import './AlbumPage.css';
 import { Link } from 'react-router-dom';
 
-function AlbumPage() {
+function AlbumPage({nom}) {
+  var titrePage = "Album : "+nom;
   return (
     <div id="albumPage">
-      <Header titre="Album : " />
+      <Header titre={titrePage} />
       <div id="albumPageContent">
         <div id="coverAlbum"/>
-        <text id="nomAlbum">Nom de l'album</text>
+        <text id="nomAlbum">{nom}</text>
         <Link to="/group" id="groupeAlbum">Groupe</Link>
         <text id="dateAlbum">Date</text>
         <text id="descriptionAlbum">Description</text>
