@@ -7,10 +7,7 @@
     "@emotion/styled": "^11.10.5",
     "@mui/icons-material": "^5.10.16",
     "@mui/material": "^5.10.17",
-<<<<<<< HEAD
-=======
     "@mui/styled-engine-sc": "^5.10.16",
->>>>>>> 8cf07ddc593160cec631e80148d382de241d8429
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",

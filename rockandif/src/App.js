@@ -6,6 +6,7 @@ import HomePage from './Pages/HomePage';
 import PersonPage from './Pages/PersonPage';
 import SinglePage from './Pages/SinglePage';
 import Header from './Components/Header';
+import HeaderMenu from './Components/HeaderMenu';
 
 function App() {
   return (
