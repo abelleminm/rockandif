@@ -7,6 +7,7 @@ import SinglePage from './Pages/SinglePage';
 import FrenchGroupsPage from './Pages/FrenchGroupsPage';
 import MoroccanGroupsPage from './Pages/MoroccanGroupsPage';
 import { Routes, Route } from 'react-router-dom';
+import PageNotFound from './Pages/PageNotFound';
 
 function App() {
   return (
@@ -17,8 +18,9 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="person" element={<PersonPage />} />
         <Route path="single" element={<SinglePage nom="Vive le vent" />} />
-        <Route path="french" element={<FrenchGroupsPage />} />
-        <Route path="moroccan" element={<MoroccanGroupsPage />} />
+        <Route path="french-groups" element={<FrenchGroupsPage />} />
+        <Route path="moroccan-groups" element={<MoroccanGroupsPage />} />
+        <Route path="*" element={<PageNotFound />} />
       </Routes>
     </div>
   );
