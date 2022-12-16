@@ -4,7 +4,7 @@ import "./Combobox.css";
 function Combobox() {
     return (
         <div id="combobox" class="custom-select">
-            <select>
+            <select id="combo">
                 <option value="band">Rock Band</option>
                 <option value="album">Album</option>
                 <option value="single">Single</option>
