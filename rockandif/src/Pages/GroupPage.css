@@ -1,0 +1,87 @@
+#groupPageContent {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: repeat(12, 1fr);
+    grid-gap: 10px;
+    padding: 10px;
+}
+
+#photoGroup {
+    grid-column: 1;
+    grid-row: 1/8;
+    background-image: url('../Images/Logo.PNG');
+}
+
+#photoGroup:hover {
+    box-shadow: 5px 5px 5px #888888;
+    /*zoom sur background image*/
+    transform: scale(1.05);
+}
+
+#nomGroupe{
+    grid-column: 1;
+    grid-row: 8;
+    font-weight: bold;
+    font-size: large;
+}
+
+#dateGroup{
+    grid-column: 1;
+    grid-row: 9;
+    font-style: italic;
+}
+
+#origineGroup{
+    grid-column: 1;
+    grid-row: 10;
+}
+
+#descriptionGroup{
+    grid-column: 2/5;
+    grid-row: 1/6;
+    border: 2px solid black;
+}
+
+#descriptionGroup:hover{
+    box-shadow: 5px 5px 5px #888888;
+}
+
+#membresGroup{
+    grid-column: 2;
+    grid-row: 6/11;
+    border: 2px solid black;
+}
+
+#membresGroup:hover{
+    box-shadow: 5px 5px 5px #888888;
+}
+
+#styleGroup{
+    grid-column: 3;
+    grid-row: 6;
+}
+
+#singlesGroup{
+    grid-column: 3;
+    grid-row: 7/11;
+    border: 2px solid black;
+}
+
+#singlesGroup:hover{
+    box-shadow: 5px 5px 5px #888888;
+}
+
+#labelGroup{
+    grid-column: 4;
+    grid-row: 6;
+}
+
+#albumsGroup{
+    grid-column: 4;
+    grid-row: 7/11;
+    border: 2px solid black;
+}
+
+#albumsGroup:hover{
+    box-shadow: 5px 5px 5px #888888;
+}
