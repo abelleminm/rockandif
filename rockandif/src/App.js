@@ -1,14 +1,9 @@
 import './App.css';
-import SearchBar from './Components/SearchBar';
 import AlbumPage from './Pages/AlbumPage';
 import GroupPage from './Pages/GroupPage';
 import HomePage from './Pages/HomePage';
 import PersonPage from './Pages/PersonPage';
 import SinglePage from './Pages/SinglePage';
-import Header from './Components/Header';
-import HeaderMenu from './Components/HeaderMenu';
-import { Group } from '@mui/icons-material';
-import GroupCard from './Components/GroupCard';
 import FrenchGroupsPage from './Pages/FrenchGroupsPage';
 import MoroccanGroupsPage from './Pages/MoroccanGroupsPage';
 import { Routes, Route } from 'react-router-dom';
