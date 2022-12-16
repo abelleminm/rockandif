@@ -1,14 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import SearchBar from '../Components/SearchBar';
 import Header from '../Components/Header';
 import Combobox from '../Components/Combobox';
 
 function HomePage() {
+  const [filter, setFilter] = useState("a Rock band...");
+  var pholder = filter=="album"? "Search an "+ filter : "Search a "+ filter ;
   return (
     <div>
     <Header titre="Welcome to Rock&IF" />
-    <SearchBar placeholder="Search a rock band..."/>
-    <Combobox/>
+    <SearchBar placeholder={pholder} filter={filter}/>
+    <Combobox setFilter={setFilter}/>
     </div>
   );
 }

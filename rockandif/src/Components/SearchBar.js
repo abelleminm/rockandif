@@ -3,7 +3,7 @@ import './SearchBar.css'
 import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
 
-function SearchBar({ placeholder }) {
+function SearchBar({ placeholder, filter }) {
   const [filteredResponse, setFilteredResponse] = useState([]);
   const [wordEntered, setWordEntered] = useState("");
 
