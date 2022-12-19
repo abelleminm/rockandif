@@ -4,8 +4,8 @@ import Header from '../Components/Header';
 import Combobox from '../Components/Combobox';
 
 function HomePage() {
-  const [filter, setFilter] = useState("a Rock band...");
-  var pholder = filter=="album"? "Search an "+ filter : "Search a "+ filter ;
+  const [filter, setFilter] = useState("band");
+  var pholder = filter=="album"? "Search an "+ filter +"..." : "Search a "+ filter +"...";
   return (
     <div>
     <Header titre="Welcome to Rock&IF" />
