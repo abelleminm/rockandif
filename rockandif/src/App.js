@@ -16,7 +16,7 @@ function App() {
   return (
     <div className="App">
       <Routes>
-        <Route path="group" element={<GroupPage nom="L'Hexaspération"  />} />
+        <Route path="group/:nom" element={<GroupPage />} />
         <Route path="album" element={<AlbumPage nom="Reprises de l'hiver" />} />
         <Route path="/" element={<HomePage />} />
         <Route path="person" element={<PersonPage nom="Gwen" />} />
