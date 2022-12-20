@@ -23,8 +23,14 @@ function SearchBar({ placeholder, filter }) {
     ?g foaf:name ?name.\
     FILTER(langMatches(lang(?name),"en") && regex(?genre, "[Rr]ock") && strlen(?name)>0)\
     FILTER(regex(lcase(str(?name)), "';
-    
-  const reqBand_end = '.*"))} ORDER BY ASC(?name) LIMIT 10';
+  const reqBand_end = '.*"))}LIMIT 10';
+
+  const reqDate_beg = 'SELECT DISTINCT ?g ?name ?year WHERE {\
+    ?g a dbo:Band; dbo:activeYearsStartYear ?year; dbo:genre ?genre.\
+    ?g foaf:name ?name.\
+    FILTER(langMatches(lang(?name),"en") && regex(?genre, "[Rr]ock") && strlen(?name)>0)\
+    FILTER(year(xsd:date(?year))=';
+    const reqDate_end = ')}LIMIT 10';
 
   const defineRequest = (filter, word) => {
     let request = "";
@@ -32,18 +38,9 @@ function SearchBar({ placeholder, filter }) {
       case "band":
         request = prefixRq + reqBand_beg + word + reqBand_end;
         break;
-      // case "album":
-      //   request = prefixRq + reqAlbum_beg + word + reqAlbum_end;
-      //   break;
-      // case "single":
-      //   request = prefixRq + reqSingle_beg + word + reqSingle_end;
-      //   break;
-      // case "member":
-      //   request = prefixRq + reqMember_beg + word + reqMember_end;
-      //   break;
-      // case "date":
-      //   request = prefixRq + reqDate_beg + word + reqDate_end;
-      //   break;
+      case "date":
+        request = prefixRq + reqDate_beg + word + reqDate_end;
+        break;
       default:
         request = prefixRq + reqBand_beg + word + reqBand_end;
         break;
