@@ -24,7 +24,7 @@ function App() {
         <Route path="single" element={<SinglePage nom="Vive le vent" />} />
         <Route path="french" element={<FrenchGroupsPage />} />
         <Route path="moroccan" element={<MoroccanGroupsPage />} />
-        <Route path="search/:text/:number" element={<SearchResultsPage />} />
+        <Route path="search/:type/:text/:number" element={<SearchResultsPage />} />
       </Routes>
     </div>
   );
