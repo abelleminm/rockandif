@@ -101,10 +101,7 @@ class GroupPage extends React.Component {
           {this.state.filteredResponse.map(item => {
             return(
               <div id="origineGroup">
-              <h3>Origine</h3>
-              <p>
                 {item.origin.value}
-              </p>
             </div>
             ); 
           })}
