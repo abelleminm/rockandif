@@ -18,7 +18,7 @@ function SearchBar({ placeholder, filter }) {
   'PREFIX dbpedia: <http://dbpedia.org/>\n '+
   'PREFIX skos: <http://www.w3.org/2004/02/skos/core#>\n ';
 
-  const reqBand_beg = 'SELECT DISTINCT ?g ?name ?year WHERE {\
+  let reqBand_beg = 'SELECT DISTINCT ?g ?name ?abstract ?year WHERE {\
     ?g a dbo:Band; dbo:activeYearsStartYear ?year; dbo:genre ?genre.\
     ?g foaf:name ?name.\
     FILTER(langMatches(lang(?name),"en") && regex(?genre, "[Rr]ock") && strlen(?name)>0)\
@@ -68,7 +68,7 @@ function SearchBar({ placeholder, filter }) {
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
           setFilteredResponse(JSON.parse(this.responseText).results.bindings);
-          console.log(filteredResponse);
+          console.log("filterdResponse: " + filteredResponse);
           // afficherResultats(filteredRequest);
         }else{
           setFilteredResponse([]);
@@ -105,7 +105,7 @@ function SearchBar({ placeholder, filter }) {
           <div className="dataResult-content">
           {filteredResponse.map((item) => {
             return(
-            <a className="dataItem" href={item.g.value} target="_blank">
+              <a className="dataItem" href= {"/group/" + item.name.value} target="_blank">
               <p>{item.name.value} ({item.year.value})</p>
             </a>)
           })}

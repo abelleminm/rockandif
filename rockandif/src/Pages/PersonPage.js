@@ -1,6 +1,6 @@
 import React from 'react';
 import Header from '../Components/Header';
-import './PersonPage.css';
+// import './PersonPage.css';
 
 function PersonPage({nom}) {
   var titrePage = "Person : "+nom;
