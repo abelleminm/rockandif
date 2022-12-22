@@ -23,7 +23,7 @@ function SearchResultsPage() {
   'PREFIX dbpedia: <http://dbpedia.org/>\n '+
   'PREFIX skos: <http://www.w3.org/2004/02/skos/core#>\n ';
 
-  const reqBand_beg = 'SELECT DISTINCT ?g ?name ?year WHERE {\
+  const reqBand_beg = 'SELECT DISTINCT ?g ?name ?year (count(?name) as ?number) WHERE {\
     ?g a dbo:Band; dbo:activeYearsStartYear ?year; dbo:genre ?genre.\
     ?g foaf:name ?name.\
     FILTER(langMatches(lang(?name),"en") && regex(?genre, "[Rr]ock") && strlen(?name)>0)\
@@ -90,13 +90,14 @@ function SearchResultsPage() {
   return (
     <div id="searchResultsPage" >
       <Header titre={titre} />
-      
       {filteredResponse.length != 0 && (
         <div id="searchResultsPageContent">
           {filteredResponse.map((item) => {
             return(
               <GroupCard nom={item.name.value} />)
           })}
+          
+
         </div>
       )}
         {/* <GroupCard nom="Groupe 1" />
