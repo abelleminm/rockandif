@@ -1,11 +1,16 @@
-import React, { useState } from 'react'
-import './SearchBar.css'
-import SearchIcon from "@mui/icons-material/Search";
-import CloseIcon from "@mui/icons-material/Close";
+import React, { useEffect, useState } from 'react'
+import Header from '../Components/Header';
+import GroupCard from '../Components/GroupCard';
+import './SearchResultsPage.css';
+import { useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
-function SearchBar({ placeholder, filter }) {
+function SearchResultsPage() {
   const [filteredResponse, setFilteredResponse] = useState([]);
-  const [wordEntered, setWordEntered] = useState("");
+  const [wordEntered, setWordEntered] = useState(useParams().text);
+  var titre = "Search results for " + wordEntered; 
+  var pageNumber = useParams().number;
+  var type = useParams().type;
 
   const prefixRq = 'PREFIX owl: <http://www.w3.org/2002/07/owl#>\n '+
   'PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n '+
@@ -18,12 +23,12 @@ function SearchBar({ placeholder, filter }) {
   'PREFIX dbpedia: <http://dbpedia.org/>\n '+
   'PREFIX skos: <http://www.w3.org/2004/02/skos/core#>\n ';
 
-  let reqBand_beg = 'SELECT DISTINCT ?g ?name ?abstract ?year WHERE {\
+  const reqBand_beg = 'SELECT DISTINCT ?g ?name ?year (count(?name) as ?number) WHERE {\
     ?g a dbo:Band; dbo:activeYearsStartYear ?year; dbo:genre ?genre.\
     ?g foaf:name ?name.\
     FILTER(langMatches(lang(?name),"en") && regex(?genre, "[Rr]ock") && strlen(?name)>0)\
     FILTER(regex(lcase(str(?name)), "';
-  const reqBand_end = '.*"))}LIMIT 10';
+  const reqBand_end = '.*"))}   ORDER BY ASC(?name) LIMIT 20';
 
   const reqDate_beg = 'SELECT DISTINCT ?g ?name ?year WHERE {\
     ?g a dbo:Band; dbo:activeYearsStartYear ?year; dbo:genre ?genre.\
@@ -32,33 +37,28 @@ function SearchBar({ placeholder, filter }) {
     FILTER(year(xsd:date(?year))=';
     const reqDate_end = ')}LIMIT 10';
 
-  const defineRequest = (filter, word) => {
+    const defineRequest = (typeRe, textRe) => {
     let request = "";
-    switch (filter) {
+    switch (typeRe) {
       case "band":
-        request = prefixRq + reqBand_beg + word + reqBand_end;
+        request = prefixRq + reqBand_beg + textRe + reqBand_end;
         break;
       case "date":
-        request = prefixRq + reqDate_beg + word + reqDate_end;
+        request = prefixRq + reqDate_beg + textRe + reqDate_end;
         break;
       default:
-        request = prefixRq + reqBand_beg + word + reqBand_end;
+        request = prefixRq + reqBand_beg + textRe + reqBand_end;
         break;
     }
     return request;
   };
 
-  const handleFilter = (event) => {
-    let searchWord = event.target.value;
-    console.log("search word : " + searchWord);
-    setWordEntered(searchWord);
-    searchWord = searchWord.toLowerCase();
-    console.log("search word : " + searchWord);
-    sendRequest(searchWord);
+  const handleFilter = () => {
+    sendRequest(wordEntered.toLowerCase());
   };
 
-  const sendRequest = (word) => {
-    const request_content = defineRequest(filter, word);
+  const sendRequest = (textToSend) => {
+    const request_content = defineRequest(type, textToSend);
     // Encodage de l'URL à transmettre à DBPedia
     var url_base = "http://dbpedia.org/sparql";
     var url = url_base + "?query=" + encodeURIComponent(request_content) + "&format=json";
@@ -68,7 +68,7 @@ function SearchBar({ placeholder, filter }) {
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
           setFilteredResponse(JSON.parse(this.responseText).results.bindings);
-          console.log("filterdResponse: " + filteredResponse);
+          console.log(filteredResponse);
           // afficherResultats(filteredRequest);
         }else{
           setFilteredResponse([]);
@@ -83,37 +83,47 @@ function SearchBar({ placeholder, filter }) {
     setWordEntered("");
   };
 
+  useEffect(() => {
+    handleFilter();
+  }, []);
+
   return (
-    <div className="search">
-      <div className="searchInputs">
-        <input
-          type="text"
-          placeholder={placeholder}
-          value={wordEntered}
-          onChange={handleFilter}
-        />
-        <div className="searchIcon">
-          {filteredResponse.length === 0 ? (
-            <SearchIcon />
-          ) : (
-            <CloseIcon id="clearBtn" onClick={clearInput} />
-          )}
-        </div>
-      </div>
+    <div id="searchResultsPage" >
+      <Header titre={titre} />
       {filteredResponse.length != 0 && (
-        <div className="dataResult">
-          <div className="dataResult-content">
+        <div id="searchResultsPageContent">
           {filteredResponse.map((item) => {
             return(
-              <a className="dataItem" href= {"/group/" + item.name.value} target="_blank">
-              <p>{item.name.value} ({item.year.value})</p>
-            </a>)
+              <GroupCard nom={item.name.value} />)
           })}
-          </div>
+          
+
         </div>
       )}
+        {/* <GroupCard nom="Groupe 1" />
+        <GroupCard nom="Groupe 2" />
+        <GroupCard nom="Groupe 3" />
+        <GroupCard nom="Groupe 4" />
+        <GroupCard nom="Groupe 5" />
+        <GroupCard nom="Groupe 6" />
+        <GroupCard nom="Groupe 7" />
+        <GroupCard nom="Groupe 8" />
+        <GroupCard nom="Groupe 9" />
+        <GroupCard nom="Groupe 10" />
+        <GroupCard nom="Groupe 11" />
+        <GroupCard nom="Groupe 12" />
+        <GroupCard nom="Groupe 13" />
+        <GroupCard nom="Groupe 14" />
+        <GroupCard nom="Groupe 15" />
+      </div> */}
+      <div id="searchResultsPageFooter">
+        <button id="previousPageButton">Previous page</button>
+        <text id="pageNumberText">Page {pageNumber}</text>
+        <button id="nextPageButton">Next page</button>
+      </div>
     </div>
   );
 }
 
-export default SearchBar;
+
+export default SearchResultsPage;

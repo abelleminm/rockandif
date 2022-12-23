@@ -34,6 +34,7 @@
 #origineGroup{
     grid-column: 1;
     grid-row: 10;
+    font-size: large;
 }
 
 #descriptionGroup{
