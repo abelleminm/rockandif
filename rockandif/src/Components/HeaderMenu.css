@@ -13,3 +13,8 @@
     position : absolute;
     margin-right: 90%;
 }
+
+a{
+    text-decoration: none;
+    color: black;
+}
