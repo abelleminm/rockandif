@@ -105,13 +105,13 @@ function SearchResultsPage() {
       <div id="searchResultsPageFooter">
         {pageNumber > 1 && (
           <Link to={"/search/"+type+"/"+wordEntered+"/"+(pageNumber-1)}> 
-            <button id="previousPageButton">Previous page</button>
+            <button class="buttons" id="previousPageButton">Previous page</button>
           </Link>
         )}
           <text id="pageNumberText">Page {pageNumber}</text>
         {filteredResponse.length == limit && (
           <Link to={"/search/"+type+"/"+wordEntered+"/"+(Number(pageNumber)+1)}>
-          <button id="nextPageButton">Next page</button>
+          <button class="buttons" id="nextPageButton">Next page</button>
           </Link>
         )}
       </div>
