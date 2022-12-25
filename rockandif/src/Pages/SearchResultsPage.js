@@ -8,9 +8,14 @@ import { Link } from 'react-router-dom';
 function SearchResultsPage() {
   const [filteredResponse, setFilteredResponse] = useState([]);
   const [wordEntered, setWordEntered] = useState(useParams().text);
-  var titre = "Search results for " + wordEntered; 
-  var pageNumber = useParams().number;
   var type = useParams().type;
+  var titre;
+  if(type === "band") {
+    titre = "Search results for '" + wordEntered + "'"; 
+  } else if (type === "date") {
+    titre = "Search results for the year " + wordEntered; 
+  }
+  var pageNumber = useParams().number;
   var limit = 20;
   var offset = limit*pageNumber - 20;
 
@@ -37,7 +42,7 @@ function SearchResultsPage() {
     ?g foaf:name ?name.\
     FILTER(langMatches(lang(?name),"en") && regex(?genre, "[Rr]ock") && strlen(?name)>0)\
     FILTER(year(xsd:date(?year))=';
-    const reqDate_end = ')}LIMIT 10';
+    const reqDate_end = ')} ORDER BY ASC(?name) OFFSET '+offset +' LIMIT '+limit;
 
     const defineRequest = (typeRe, textRe) => {
     let request = "";
@@ -86,7 +91,7 @@ function SearchResultsPage() {
   };
 
   useEffect(() => {
-    handleFilter();
+      handleFilter();
   }, []);
 
   return (
@@ -98,20 +103,18 @@ function SearchResultsPage() {
             return(
               <GroupCard nom={item.name.value} />)
           })}
-          
-
         </div>
       )}
       <div id="searchResultsPageFooter">
         {pageNumber > 1 && (
-          <Link to={"/search/"+type+"/"+wordEntered+"/"+(pageNumber-1)}> 
-            <button class="buttons" id="previousPageButton">Previous page</button>
+          <Link to={"/search/"+type+"/"+wordEntered+"/"+(pageNumber-1)} > 
+            <button className="buttons" id="previousPageButton">Previous page</button>
           </Link>
         )}
           <text id="pageNumberText">Page {pageNumber}</text>
         {filteredResponse.length == limit && (
           <Link to={"/search/"+type+"/"+wordEntered+"/"+(Number(pageNumber)+1)}>
-          <button class="buttons" id="nextPageButton">Next page</button>
+            <button className="buttons" id="nextPageButton">Next page</button>
           </Link>
         )}
       </div>
