@@ -11,6 +11,8 @@ function SearchResultsPage() {
   var titre = "Search results for " + wordEntered; 
   var pageNumber = useParams().number;
   var type = useParams().type;
+  var limit = 20;
+  var offset = limit*pageNumber - 20;
 
   const prefixRq = 'PREFIX owl: <http://www.w3.org/2002/07/owl#>\n '+
   'PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n '+
@@ -28,7 +30,7 @@ function SearchResultsPage() {
     ?g foaf:name ?name.\
     FILTER(langMatches(lang(?name),"en") && regex(?genre, "[Rr]ock") && strlen(?name)>0)\
     FILTER(regex(lcase(str(?name)), "';
-  const reqBand_end = '.*"))}   ORDER BY ASC(?name) LIMIT 20';
+  const reqBand_end = '.*"))}   ORDER BY ASC(?name) OFFSET '+offset +' LIMIT '+limit;
 
   const reqDate_beg = 'SELECT DISTINCT ?g ?name ?year WHERE {\
     ?g a dbo:Band; dbo:activeYearsStartYear ?year; dbo:genre ?genre.\
@@ -100,26 +102,18 @@ function SearchResultsPage() {
 
         </div>
       )}
-        {/* <GroupCard nom="Groupe 1" />
-        <GroupCard nom="Groupe 2" />
-        <GroupCard nom="Groupe 3" />
-        <GroupCard nom="Groupe 4" />
-        <GroupCard nom="Groupe 5" />
-        <GroupCard nom="Groupe 6" />
-        <GroupCard nom="Groupe 7" />
-        <GroupCard nom="Groupe 8" />
-        <GroupCard nom="Groupe 9" />
-        <GroupCard nom="Groupe 10" />
-        <GroupCard nom="Groupe 11" />
-        <GroupCard nom="Groupe 12" />
-        <GroupCard nom="Groupe 13" />
-        <GroupCard nom="Groupe 14" />
-        <GroupCard nom="Groupe 15" />
-      </div> */}
       <div id="searchResultsPageFooter">
-        <button id="previousPageButton">Previous page</button>
-        <text id="pageNumberText">Page {pageNumber}</text>
-        <button id="nextPageButton">Next page</button>
+        {pageNumber > 1 && (
+          <Link to={"/search/"+type+"/"+wordEntered+"/"+(pageNumber-1)}> 
+            <button id="previousPageButton">Previous page</button>
+          </Link>
+        )}
+          <text id="pageNumberText">Page {pageNumber}</text>
+        {filteredResponse.length == limit && (
+          <Link to={"/search/"+type+"/"+wordEntered+"/"+(Number(pageNumber)+1)}>
+          <button id="nextPageButton">Next page</button>
+          </Link>
+        )}
       </div>
     </div>
   );
