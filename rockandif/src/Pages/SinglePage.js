@@ -73,25 +73,110 @@ function SinglePage() {
             return(
               <text id="nomSingle">{item.name.value}</text>
             )
-          })};   
+          })}
           {filteredResponse.map((item)=>{
             var linkAlbum = "/album/" + item.artist.value + "/" + item.album.value;
             return(
-              <Link to={linkAlbum} id="nomAlbumSingle">{item.album.value}</Link>
+              <Link to={linkAlbum} id="nomAlbumSingle">Album : {item.album.value}</Link>
             )
-          })};
+          })}
           {filteredResponse.map((item)=>{
             var linkBand = "/group/" + item.artist.value;
             return(
               <Link to={linkBand} id="groupeSingle">{item.artist.value}</Link>
             )
-          })};
-          <text id="dateSingle">Date</text>
-          <text id="descriptionSingle">Description</text>
-          <text id="styleSingle">Style</text>
-          <text id="writersSingle">Writers</text>
-          <text id="awardSingle">Award</text>
-          <text id="labelSingle">Label</text>
+          })}
+          {filteredResponse.map((item)=>{
+            if(item.relDate != null) { 
+              return(
+                <text id="dateSingle">{item.relDate.value}</text>
+              )
+            } else {
+              return(
+                <text id="dateSingle">Unknown released Date</text>
+              )
+            }
+          })}
+          {filteredResponse.map((item)=>{
+            return(
+              <div id="descriptionSingleDiv">
+                <h3 id="descriptionSingleTitle">Description</h3>
+                <text id="descriptionSingle">{item.abstract.value}</text>
+              </div>
+            )
+          })}
+          {filteredResponse.map((item)=>{
+            if(item.genre != null) {
+              var genres = item.genre.value.split("*");
+              return(
+                <div id="genreSingleDiv">
+                  <h3 id="genreSingleTitle">Genre</h3>
+                  <ul id="genreSingleList">
+                  {genres.map((genre)=>{
+                      return(
+                        <li id="genreSingle">{genre}</li>
+                      )
+                  })}
+                  </ul>
+                </div>
+              )
+            } else {
+              return(
+                <div id="genreSingleDiv">
+                  <h3 id="genreSingleTitle">Genre</h3>
+                  <text id="genreSingle">Unknown genre</text>
+                </div>
+              )
+            }
+          })}
+          {filteredResponse.map((item)=>{
+            if(item.awards != null) {
+              var awards = item.awards.value.split("*");
+              return(
+                <div id="awardSingleDiv">
+                  <h3 id="awardSingleTitle">Awards</h3>
+                  <ul id="awardSingleList">
+                  {awards.map((award)=>{
+                      return(
+                        <li id="awardSingle">{award}</li>
+                      )
+                  })}
+                  </ul>
+                </div>
+              )
+            } else {
+              return(
+                <div id="awardSingleDiv">
+                  <h3 id="awardSingleTitle">Awards</h3>
+                  <text id="awardSingle">No awards</text>
+                </div>
+              )
+            }
+          })}
+          {filteredResponse.map((item)=>{
+            if(item.label != null) {
+              var labels = item.label.value.split("*");
+              return(
+                <div id="labelSingleDiv">
+                  <h3 id="labelSingleTitle">Label</h3>
+                  <ul id="labelSingleList">
+                  {labels.map((label)=>{
+                      return(
+                        <li id="labelSingle">{label}</li>
+                      )
+                  })}
+                  </ul>
+                </div>
+              )
+            } else {
+              return(
+                <div id="labelSingleDiv">
+                  <h3 id="labelSingleTitle">Label</h3>
+                  <text id="labelSingle">Unknown label</text>
+                </div>
+              )
+            }
+          })}
         </div>
       )}
     </div>
