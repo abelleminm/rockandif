@@ -7,10 +7,7 @@ function FrenchGroupsPage() {
     <div id="frenchGroupsPage">
       <Header titre="French Groups" />
       <div id="frenchgroupspagecontent">
-        <SearchBarCountryGroups countryName="France" placeholder="Rechercher un groupe français"/>
-        <div id="test">
-
-        </div>
+        <SearchBarCountryGroups countryName="France" placeholder="Search for a French group..."/>
        </div>
     </div>
   );

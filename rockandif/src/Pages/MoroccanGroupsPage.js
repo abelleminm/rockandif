@@ -9,7 +9,7 @@ function MoroccanGroupsPage() {
     <div id="moroccanGroupsPage">
       <Header titre="Moroccan Groups" />
       <div id="frenchgroupspagecontent">
-        <SearchBarCountryGroups countryName="Morocco" placeholder="Rechercher un groupe Marocain"/>
+        <SearchBarCountryGroups countryName="Morocco" placeholder="Search for a Moroccan Group..."/>
        </div>
     </div>
   );
