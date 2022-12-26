@@ -29,16 +29,20 @@ class GroupPage extends React.Component {
     'PREFIX dbpedia: <http://dbpedia.org/>\n '+
     'PREFIX skos: <http://www.w3.org/2004/02/skos/core#>\n ';
 
-    let reqBand_beg = 'SELECT DISTINCT ?g ?name ?abstract ?year ?origin (GROUP_CONCAT(DISTINCT ?genre; separator=" ; ") AS ?genre) WHERE {\
+    let reqBand_beg = 'SELECT DISTINCT ?g ?name ?abstract ?year ?origin  \
+    (GROUP_CONCAT(DISTINCT ?genreName; separator=" ; ") AS ?genre) (GROUP_CONCAT(DISTINCT ?nameMember; separator=" ; ") AS ?members)  WHERE {\
       ?g a dbo:Band; dbo:genre ?genre.\
+      ?genre foaf:name ?genreName.\
       ?g foaf:name ?name.\
       ?g dbo:abstract ?abstract. \
       ?g dbo:activeYearsStartYear ?year. \
       ?g dbp:origin ?origin \
+      OPTIONAL { ?g dbo:bandMember|dbo:formerBandMember ?p. } \
+      OPTIONAL { ?p dbp:name ?nameMember. } \
       FILTER(langMatches(lang(?name),"en") && regex(?genre, "[Rr]ock") \
-      && langMatches(lang(?abstract),"en") && regex(lcase(str(?name)), "';
+      && langMatches(lang(?abstract),"en") && regex(lcase(str(?name)), "^';
       
-    let reqBand_end = '*"))} ORDER BY ASC(?name) LIMIT 10';
+    let reqBand_end = '$"))} ORDER BY ASC(?name) LIMIT 10';
 
     
     var request = prefixRq + reqBand_beg + nom.toLowerCase() + reqBand_end; 
@@ -66,7 +70,7 @@ class GroupPage extends React.Component {
     }
     xmlhttp.open("GET", url, true);
     xmlhttp.send();
-  }
+  } 
   getElementsFromRequest(response) {
     console.log("************ START getElementsFromRequest ***************"); 
     this.setState({filteredResponse: response});
@@ -88,43 +92,46 @@ class GroupPage extends React.Component {
           <div id="photoGroup"/>
           <div id="nomGroupe">{this.state.nom}</div>
           <div id="dateGroup"></div>
-          {this.state.filteredResponse.map(item => {
-            return(
               <div id="dateGroup">
               <h3>Date création - Date fin</h3>
               <p>
-                {item.year.value}
+                {this.state.filteredResponse[0].year.value}
               </p>
             </div>
-            ); 
-          })}
+          
           {this.state.filteredResponse.map(item => {
             return(
               <div id="origineGroup">
-                {item.origin.value}
+                {this.state.filteredResponse[0].origin.value}
             </div>
             ); 
           })}
-          {this.state.filteredResponse.map(item => {
-            return(
-              <div id="descriptionGroup">
-              <h3>Description Group</h3>
-              <p>
-                {item.abstract.value}
-              </p>
-            </div>
-            ); 
-          })}
-          <div id="membresGroup">Membres</div>
+          <div id="descriptionGroup">
+            <h3>Description Group</h3>
+            <p>
+              {this.state.filteredResponse[0].abstract.value}
+            </p>
+          </div>
+
+          <div id="membresGroup">
+           <h3>Members</h3>
+            {this.state.filteredResponse[0].members.value.split(';').map(member => {
+              return(                
+                <p>
+                {member}
+                </p>
+              ); 
+            })}
+          </div>
           <div id="styleGroup">
-            <h3>Style</h3>
-            {this.state.filteredResponse.map(item => {
-            return(              
-              <p>
-                {item.genre.value}
-              </p>
-            ); 
-          })}
+            <h3>Style(s)</h3>    
+            {this.state.filteredResponse[0].genre.value.split(';').map(style => {
+              return(                
+                <p>
+                {style}
+                </p>
+              ); 
+            })}     
           </div>
           
           <div id="singlesGroup">Singles</div>
