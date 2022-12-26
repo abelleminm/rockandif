@@ -131,7 +131,7 @@ function SearchBar({ placeholder, filter }) {
           </div>
         )}
       </div>
-    </div>
+    </div> 
   );
 }
 
