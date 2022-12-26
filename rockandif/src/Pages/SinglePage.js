@@ -88,15 +88,15 @@ function SinglePage() {
           })}
           {filteredResponse.map((item)=>{
             if(item.relDate != null) { 
-              return(
-                <text id="dateSingle">{item.relDate.value}</text>
-              )
-            } else {
-              return(
-                <text id="dateSingle">Unknown released Date</text>
-              )
-            }
-          })}
+                return(
+                  <text id="dateSingle">{item.relDate.value}</text>
+                )
+              } else {
+                return(
+                  <text id="dateSingle">Unknown released Date</text>
+                )
+              }
+            })}
           {filteredResponse.map((item)=>{
             return(
               <div id="descriptionSingleDiv">
