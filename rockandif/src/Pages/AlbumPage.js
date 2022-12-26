@@ -21,12 +21,14 @@ function AlbumPage() {
   'PREFIX dbpedia: <http://dbpedia.org/>\n '+
   'PREFIX skos: <http://www.w3.org/2004/02/skos/core#>\n ';
 
-  const reqAlbum = 'SELECT ?a ?abstract ?name ?artist (GROUP_CONCAT(DISTINCT ?award ; separator="*") AS ?awards) ?sales ?reldate (GROUP_CONCAT(DISTINCT ?title ; separator="*") AS ?titles) WHERE {\
+  const reqAlbum = 'SELECT ?a ?abstract ?name ?artist (GROUP_CONCAT(DISTINCT ?award ; separator="*") AS ?awards) ?sales ?reldate (GROUP_CONCAT(DISTINCT ?titleName ; separator="*") AS ?titlesLink) (GROUP_CONCAT(DISTINCT ?title1 ; separator="*") AS ?titles) WHERE {\
     ?a a dbo:Album; dbo:abstract ?abstract; dbp:artist ?artiste; dbp:name ?name; dbp:award ?award.\
     { ?artiste a dbo:Band. } UNION { ?artiste a dbo:Artist. }\
     OPTIONAL { ?a dbp:salesamount ?sales. }\
     OPTIONAL { ?a dbp:released ?reldate. }\
-    OPTIONAL { ?a dbp:title ?title. }\
+    OPTIONAL { ?a dbp:title ?title1. }\
+    OPTIONAL { ?a dbp:title ?title2. }\
+    ?title2 dbp:name ?titleName.\
     ?artiste dbp:name ?artist.\
     FILTER(langMatches(lang(?abstract),"EN"))\
     FILTER(regex(lcase(str(?name)),"'+nom.toLowerCase()+'"))\
@@ -129,16 +131,48 @@ function AlbumPage() {
         {filteredResponse.map((item)=> {
           if(item.titles != null) {
             var titles = item.titles.value.split("*");
-            
+            var titlesLink = item.titlesLink.value.split("*");
+            //trier les titres en mettant url en premier
+            titles.sort(function(a, b) {
+              if(a.includes("dbpedia.org")) {
+                return -1;
+              } else {
+                return 1;
+              }
+            });
+            //count number of url in titles
+            var count = 0;
+            for(var i = 0; i < titles.length; i++) {
+              if(titles[i].includes("dbpedia.org")) {
+                count++;
+              }
+            }
+            //delete url from titles
+            for(var i = 0; i < count; i++) {
+              titles.shift();
+            }
+            //delete title from titles that are in titlesLink
+            for(var i = 0; i < titlesLink.length; i++) {
+              for(var j = 0; j < titles.length; j++) {
+                if(titlesLink[i] == titles[j]) {
+                  titles.splice(j, 1);
+                }
+              }
+            }
             return (
               <div id="singlesAlbumDiv">
                 <h3 id="singlesAlbumTitle">Singles</h3>
                 <ul id="singlesAlbumList">
                   {titles.map((title)=> {
+                    return (
+                      <li id="singlesAlbumItem">{title}</li>
+                    )
+                  })}
+                  {titlesLink.map((title)=> {
                     var linkSingle = "/single/"+band+"/"+nom+"/"+title;
                     return (
                       <Link to={linkSingle}>
-                        <li id="singlesAlbumItem">{title}</li>
+                        <li id="singlesAlbumItemLinked">{title}</li>
                       </Link>
                     )
                   })}
