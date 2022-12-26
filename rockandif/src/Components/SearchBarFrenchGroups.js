@@ -1,9 +1,10 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import './SearchBar.css'
 import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
+import GroupCard from './GroupCard';
 
-function SearchBar({ placeholder, filter }) {
+function SearchBarFrenchGroups({ placeholder }) {
   const [filteredResponse, setFilteredResponse] = useState([]);
   const [wordEntered, setWordEntered] = useState("");
 
@@ -18,33 +19,18 @@ function SearchBar({ placeholder, filter }) {
   'PREFIX dbpedia: <http://dbpedia.org/>\n '+
   'PREFIX skos: <http://www.w3.org/2004/02/skos/core#>\n ';
 
-  let reqBand_beg = 'SELECT DISTINCT ?g ?name ?abstract ?year WHERE {\
-    ?g a dbo:Band; dbo:activeYearsStartYear ?year; dbo:genre ?genre.\
-    ?g foaf:name ?name.\
-    FILTER(langMatches(lang(?name),"en") && regex(?genre, "[Rr]ock") && strlen(?name)>0)\
-    FILTER(regex(lcase(str(?name)), "';
-  const reqBand_end = '.*"))}LIMIT 10';
+  let reqBand_beg = 'SELECT DISTINCT ?name  WHERE {\
+    ?g a dbo:Band; dbo:genre ?genre; dbo:hometown ?town; dbo:abstract ?abstract.\
+    ?town dbo:country ?country.\
+    ?country rdfs:label "France"@en.\
+    ?g dbp:name ?name.\
+    FILTER(langMatches(lang(?name),"en") && regex(?genre, "[Rr]ock") && langMatches(lang(?abstract),"en"))\
+    FILTER(regex(lcase(str(?name)), "'
+  const reqBand_end = '.*"))} ORDER BY ASC(?name)';
 
-  const reqDate_beg = 'SELECT DISTINCT ?g ?name ?year WHERE {\
-    ?g a dbo:Band; dbo:activeYearsStartYear ?year; dbo:genre ?genre.\
-    ?g foaf:name ?name.\
-    FILTER(langMatches(lang(?name),"en") && regex(?genre, "[Rr]ock") && strlen(?name)>0)\
-    FILTER(year(xsd:date(?year))=';
-    const reqDate_end = ')}LIMIT 10';
 
-  const defineRequest = (filter, word) => {
-    let request = "";
-    switch (filter) {
-      case "band":
-        request = prefixRq + reqBand_beg + word + reqBand_end;
-        break;
-      case "date":
-        request = prefixRq + reqDate_beg + word + reqDate_end;
-        break;
-      default:
-        request = prefixRq + reqBand_beg + word + reqBand_end;
-        break;
-    }
+  const defineRequest = (word) => {
+    let request = prefixRq + reqBand_beg + word + reqBand_end;
     return request;
   };
 
@@ -58,7 +44,7 @@ function SearchBar({ placeholder, filter }) {
   };
 
   const sendRequest = (word) => {
-    const request_content = defineRequest(filter, word);
+    const request_content = defineRequest(word);
     // Encodage de l'URL à transmettre à DBPedia
     var url_base = "http://dbpedia.org/sparql";
     var url = url_base + "?query=" + encodeURIComponent(request_content) + "&format=json";
@@ -83,6 +69,11 @@ function SearchBar({ placeholder, filter }) {
     setWordEntered("");
   };
 
+  //affichage de tous les groupes français au chargement de la page
+  useEffect(() => {
+    sendRequest("");
+  }, [])
+
   return (
     <div className="search">
       <div className="searchInputs">
@@ -101,19 +92,16 @@ function SearchBar({ placeholder, filter }) {
         </div>
       </div>
       {filteredResponse.length != 0 && (
-        <div className="dataResult">
-          <div className="dataResult-content">
+        <div className="groupcards">
           {filteredResponse.map((item) => {
             return(
-              <a className="dataItem" href= {"/group/" + item.name.value} target="_blank">
-              <p>{item.name.value} ({item.year.value})</p>
-            </a>)
+              <GroupCard nom={item.name.value}></GroupCard>
+             )
           })}
           </div>
-        </div>
       )}
     </div>
   );
 }
 
-export default SearchBar;
+export default SearchBarFrenchGroups;

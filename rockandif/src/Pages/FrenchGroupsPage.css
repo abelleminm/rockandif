@@ -1,4 +1,4 @@
-#frenchGroupsPageContent{
+.groupcards{
     display: grid;
     grid-template-rows: repeat(var(--rowNum), var(--gridHeight));
     grid-template-columns: repeat(5, 1fr);
