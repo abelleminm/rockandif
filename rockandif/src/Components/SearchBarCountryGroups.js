@@ -4,7 +4,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
 import GroupCard from './GroupCard';
 
-function SearchBarFrenchGroups({ placeholder }) {
+function SearchBarCountryGroups({ placeholder,countryName }) {
   const [filteredResponse, setFilteredResponse] = useState([]);
   const [wordEntered, setWordEntered] = useState("");
 
@@ -22,7 +22,7 @@ function SearchBarFrenchGroups({ placeholder }) {
   let reqBand_beg = 'SELECT DISTINCT ?name  WHERE {\
     ?g a dbo:Band; dbo:genre ?genre; dbo:hometown ?town; dbo:abstract ?abstract.\
     ?town dbo:country ?country.\
-    ?country rdfs:label "France"@en.\
+    ?country rdfs:label "'+countryName+'"@en.\
     ?g dbp:name ?name.\
     FILTER(langMatches(lang(?name),"en") && regex(?genre, "[Rr]ock") && langMatches(lang(?abstract),"en"))\
     FILTER(regex(lcase(str(?name)), "'
@@ -72,7 +72,8 @@ function SearchBarFrenchGroups({ placeholder }) {
   //affichage de tous les groupes français au chargement de la page
   useEffect(() => {
     sendRequest("");
-  }, [])
+  },[])
+
 
   return (
     <div className="search">
@@ -84,11 +85,7 @@ function SearchBarFrenchGroups({ placeholder }) {
           onChange={handleFilter}
         />
         <div className="searchIcon">
-          {filteredResponse.length === 0 ? (
             <SearchIcon />
-          ) : (
-            <CloseIcon id="clearBtn" onClick={clearInput} />
-          )}
         </div>
       </div>
       {filteredResponse.length != 0 && (
@@ -102,6 +99,7 @@ function SearchBarFrenchGroups({ placeholder }) {
       )}
     </div>
   );
+  
 }
 
-export default SearchBarFrenchGroups;
+export default SearchBarCountryGroups;
