@@ -18,10 +18,10 @@ function App() {
     <div className="App">
       <Routes>
         <Route path="group/:nom" element={<GroupPage />} />
-        <Route path="album" element={<AlbumPage nom="Reprises de l'hiver" />} />
+        <Route path="album/:band/:nom" element={<AlbumPage />} />
         <Route path="/" element={<HomePage />} />
         <Route path="person" element={<PersonPage nom="Gwen" />} />
-        <Route path="single" element={<SinglePage nom="Vive le vent" />} />
+        <Route path="single/:band/:album/:title" element={<SinglePage/>} />
         <Route path="french" element={<FrenchGroupsPage />} />
         <Route path="moroccan" element={<MoroccanGroupsPage />} />
         <Route path="search/:type/:text/:number" element={<SearchResultsPage />} />
