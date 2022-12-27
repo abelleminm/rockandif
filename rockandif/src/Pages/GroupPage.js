@@ -7,18 +7,12 @@ class GroupPage extends React.Component {
     super(props); 
     this.state = {
       filteredResponse: [], 
+      filteredAlbumResponse: [],
       wordEntered: "", 
       request: "", 
       nom: ""
     }
-  }
-  componentDidMount(){
-    this.setState({nom: this.props.params.nom}); 
-    this.rechercher(this.props.params.nom);      
-  }
-
-  rechercher(nom){
-    let prefixRq = 'PREFIX owl: <http://www.w3.org/2002/07/owl#>\n '+
+    this.prefixRq = 'PREFIX owl: <http://www.w3.org/2002/07/owl#>\n '+
     'PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n '+
     'PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n '+
     'PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n '+
@@ -29,7 +23,7 @@ class GroupPage extends React.Component {
     'PREFIX dbpedia: <http://dbpedia.org/>\n '+
     'PREFIX skos: <http://www.w3.org/2004/02/skos/core#>\n ';
 
-    let reqBand_beg = 'SELECT DISTINCT ?g ?name ?abstract ?year ?origin  \
+    this.reqBand_beg = 'SELECT DISTINCT ?g ?name ?abstract ?year ?origin  \
     (GROUP_CONCAT(DISTINCT ?genreName; separator=" ; ") AS ?genre) (GROUP_CONCAT(DISTINCT ?nameMember; separator=" ; ") AS ?members)  WHERE {\
       ?g a dbo:Band; dbo:genre ?genre.\
       ?genre foaf:name ?genreName.\
@@ -42,10 +36,18 @@ class GroupPage extends React.Component {
       FILTER(langMatches(lang(?name),"en") && regex(?genre, "[Rr]ock") \
       && langMatches(lang(?abstract),"en") && regex(lcase(str(?name)), "^';
       
-    let reqBand_end = '$"))} ORDER BY ASC(?name) LIMIT 10';
+    this.reqBand_end = '$"))} ORDER BY ASC(?name) LIMIT 10';
 
-    
-    var request = prefixRq + reqBand_beg + nom.toLowerCase() + reqBand_end; 
+
+  }
+  componentDidMount(){
+    this.setState({nom: this.props.params.nom}); 
+    this.rechercher(this.props.params.nom);      
+    this.findAlbums(this.props.params.nom);
+  }
+
+  rechercher(nom){
+    var request = this.prefixRq + this.reqBand_beg + nom.toLowerCase() + this.reqBand_end; 
     console.log("print out " + request);
     // Encodage de l'URL à transmettre à DBPedia
     var url_base = "http://dbpedia.org/sparql";
@@ -78,6 +80,46 @@ class GroupPage extends React.Component {
         console.log("item name: " + item.name.value); 
       }); 
     console.log("************ END getElementsFromRequest ***************"); 
+  }
+
+  findAlbums(bandName){
+    const reqAlbum = 'SELECT ?a ?abstract ?name ?artist (GROUP_CONCAT(DISTINCT ?award ; separator="*") AS ?awards) ?sales ?reldate (GROUP_CONCAT(DISTINCT ?titleName ; separator="*") AS ?titlesLink) (GROUP_CONCAT(DISTINCT ?title1 ; separator="*") AS ?titles) WHERE {\
+      ?a a dbo:Album; dbo:abstract ?abstract; dbp:artist ?artiste; dbp:name ?name; dbp:award ?award.\
+      { ?artiste a dbo:Band. } UNION { ?artiste a dbo:Artist. }\
+      OPTIONAL { ?a dbp:salesamount ?sales. }\
+      OPTIONAL { ?a dbp:released ?reldate. }\
+      OPTIONAL { ?a dbp:title ?title1. }\
+      OPTIONAL { ?a dbp:title ?title2. }\
+      ?title2 dbp:name ?titleName.\
+      ?artiste dbp:name ?artist.\
+      FILTER(langMatches(lang(?abstract),"EN"))\
+      FILTER(regex(lcase(str(?artist)),"'+bandName.toLowerCase()+'"))\
+      }\
+      LIMIT 10';
+      var request = this.prefixRq + reqAlbum ; 
+      console.log("request for albums:  " + reqAlbum);
+      var url_base = "http://dbpedia.org/sparql";
+    var url = url_base + "?query=" + encodeURIComponent(request) + "&format=json";
+
+    // Requête HTTP et affichage des résultats
+    var xmlhttp = new XMLHttpRequest();
+    var response  = []; 
+    var that = this; 
+    xmlhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        console.log("readyState : " + this.readyState + ", status: " + this.status);     
+        console.log("response lenght " + JSON.parse(this.responseText).results.bindings.length);
+        response = JSON.parse(this.responseText).results.bindings; 
+        that.setState({filteredAlbumResponse: response}); 
+      }
+      
+    };
+    console.log("response length post traitement: " + response.length);
+    if(response.length != 0 ) {
+      this.setState({filteredAlbumResponse: response}); 
+    }
+    xmlhttp.open("GET", url, true);
+    xmlhttp.send();
   }
   render() {
   return (
@@ -136,7 +178,15 @@ class GroupPage extends React.Component {
           
           <div id="singlesGroup">Singles</div>
           <div id="labelGroup">Label</div>
-          <div id="albumsGroup">Albums</div>
+          <div id="albumsGroup">
+            <h3>Albums:</h3>
+          {this.state.filteredAlbumResponse.map(item => {
+            return(
+            <a class= "link"href= {"/album/" + this.props.params.nom + "/" + item.name.value}><p>{item.name.value}</p></a>
+
+            ); 
+          })}
+          </div>
       </div> 
       )
       }
