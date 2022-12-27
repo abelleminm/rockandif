@@ -9,10 +9,16 @@ header{
     justify-content: center;  
 }
 
-img{
-    height: 120px;
+#home-link{
     position: absolute;
     margin-left:90%;
+}
+
+img{
+    height: 120px;
+}
+img:hover{
+    height: 123px;
 }
 
 #titre{
@@ -20,19 +26,4 @@ img{
     font-family: "Rock Salt";
     font-style: italic;
     text-shadow: #ff0000 3px 3px;
-}
-
-
-#boutonMenu{
-    background-color: white;
-    color: #541B1B;
-    position: absolute;
-    margin-right: 90%;
-}
-
-#boutonMenu:hover{
-    background-color: #762d2d;
-    color: white;
-    position: absolute;
-    margin-right: 90%;
 }

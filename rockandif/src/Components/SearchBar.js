@@ -18,7 +18,7 @@ function SearchBar({ placeholder, filter }) {
   'PREFIX dbpedia: <http://dbpedia.org/>\n '+
   'PREFIX skos: <http://www.w3.org/2004/02/skos/core#>\n ';
 
-  const reqBand_beg = 'SELECT DISTINCT ?g ?name ?year WHERE {\
+  let reqBand_beg = 'SELECT DISTINCT ?g ?name ?abstract ?year WHERE {\
     ?g a dbo:Band; dbo:activeYearsStartYear ?year; dbo:genre ?genre.\
     ?g foaf:name ?name.\
     FILTER(langMatches(lang(?name),"en") && regex(?genre, "[Rr]ock") && strlen(?name)>0)\
@@ -48,6 +48,22 @@ function SearchBar({ placeholder, filter }) {
     return request;
   };
 
+  const goToSearch = () => {
+    if(wordEntered.length > 0){
+      if(filter === "date"){
+        window.location.href = "/search/date/" + wordEntered+"/1";
+      }else{
+        window.location.href = "/search/band/" + wordEntered+"/1";
+      }
+    }
+  };
+
+  const handleEnter = (event) => {
+    if (event.key === "Enter") {
+      goToSearch();
+    }
+  };
+
   const handleFilter = (event) => {
     let searchWord = event.target.value;
     console.log("search word : " + searchWord);
@@ -68,7 +84,7 @@ function SearchBar({ placeholder, filter }) {
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
           setFilteredResponse(JSON.parse(this.responseText).results.bindings);
-          console.log(filteredResponse);
+          console.log("filterdResponse: " + filteredResponse);
           // afficherResultats(filteredRequest);
         }else{
           setFilteredResponse([]);
@@ -85,34 +101,37 @@ function SearchBar({ placeholder, filter }) {
 
   return (
     <div className="search">
-      <div className="searchInputs">
-        <input
-          type="text"
-          placeholder={placeholder}
-          value={wordEntered}
-          onChange={handleFilter}
-        />
-        <div className="searchIcon">
-          {filteredResponse.length === 0 ? (
-            <SearchIcon />
-          ) : (
-            <CloseIcon id="clearBtn" onClick={clearInput} />
-          )}
-        </div>
-      </div>
-      {filteredResponse.length != 0 && (
-        <div className="dataResult">
-          <div className="dataResult-content">
-          {filteredResponse.map((item) => {
-            return(
-            <a className="dataItem" href={item.g.value} target="_blank">
-              <p>{item.name.value} ({item.year.value})</p>
-            </a>)
-          })}
+      <div className="searchContent">
+        <div className="searchInputs">
+          <input
+            type="text"
+            placeholder={placeholder}
+            value={wordEntered}
+            onChange={handleFilter}
+            onKeyPress={handleEnter}
+          />
+          <div className="searchIcon">
+            {filteredResponse.length === 0 ? (
+              <SearchIcon />
+            ) : (
+              <CloseIcon id="clearBtn" onClick={clearInput} />
+            )}
           </div>
         </div>
-      )}
-    </div>
+        {filteredResponse.length != 0 && (
+          <div className="dataResult">
+            <div className="dataResult-content">
+            {filteredResponse.map((item) => {
+              return(
+                <a className="dataItem" href= {"/group/" + item.name.value} target="_blank">
+                <p>{item.name.value} ({item.year.value})</p>
+              </a>)
+            })}
+            </div>
+          </div>
+        )}
+      </div>
+    </div> 
   );
 }
 

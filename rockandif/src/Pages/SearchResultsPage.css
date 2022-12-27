@@ -1,0 +1,29 @@
+#searchResultsPageContent{
+    display: grid;
+    grid-template-rows: repeat(var(--rowNum), var(--gridHeight));
+    grid-template-columns: repeat(5, 1fr);
+    grid-gap: 10px;
+    padding: 10px;
+}
+
+#pageNumberText{
+    padding: 10px;
+    font-size: 1.25em;
+    font-family: "Rock Salt";
+    font-style: italic;
+}
+
+
+.buttons{
+    border-radius: 5px;
+    background-color: #f2f2f2;
+    border: black 2px solid;
+    font-size: 1.25em;
+    font-family: "Rock Salt";
+}
+
+.buttons:hover{
+    background-color: #ddd;
+    cursor: pointer;
+    box-shadow: 5px 5px 5px #888888;
+}

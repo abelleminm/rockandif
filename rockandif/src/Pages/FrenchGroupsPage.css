@@ -1,7 +1,0 @@
-#frenchGroupsPageContent{
-    display: grid;
-    grid-template-rows: repeat(var(--rowNum), var(--gridHeight));
-    grid-template-columns: repeat(5, 1fr);
-    grid-gap: 10px;
-    padding: 10px;
-}
