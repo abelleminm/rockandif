@@ -48,6 +48,22 @@ function SearchBar({ placeholder, filter }) {
     return request;
   };
 
+  const goToSearch = () => {
+    if(wordEntered.length > 0){
+      if(filter === "date"){
+        window.location.href = "/search/date/" + wordEntered+"/1";
+      }else{
+        window.location.href = "/search/band/" + wordEntered+"/1";
+      }
+    }
+  };
+
+  const handleEnter = (event) => {
+    if (event.key === "Enter") {
+      goToSearch();
+    }
+  };
+
   const handleFilter = (event) => {
     let searchWord = event.target.value;
     console.log("search word : " + searchWord);
@@ -85,34 +101,37 @@ function SearchBar({ placeholder, filter }) {
 
   return (
     <div className="search">
-      <div className="searchInputs">
-        <input
-          type="text"
-          placeholder={placeholder}
-          value={wordEntered}
-          onChange={handleFilter}
-        />
-        <div className="searchIcon">
-          {filteredResponse.length === 0 ? (
-            <SearchIcon />
-          ) : (
-            <CloseIcon id="clearBtn" onClick={clearInput} />
-          )}
-        </div>
-      </div>
-      {filteredResponse.length != 0 && (
-        <div className="dataResult">
-          <div className="dataResult-content">
-          {filteredResponse.map((item) => {
-            return(
-              <a className="dataItem" href= {"/group/" + item.name.value} target="_blank">
-              <p>{item.name.value} ({item.year.value})</p>
-            </a>)
-          })}
+      <div className="searchContent">
+        <div className="searchInputs">
+          <input
+            type="text"
+            placeholder={placeholder}
+            value={wordEntered}
+            onChange={handleFilter}
+            onKeyPress={handleEnter}
+          />
+          <div className="searchIcon">
+            {filteredResponse.length === 0 ? (
+              <SearchIcon />
+            ) : (
+              <CloseIcon id="clearBtn" onClick={clearInput} />
+            )}
           </div>
         </div>
-      )}
-    </div>
+        {filteredResponse.length != 0 && (
+          <div className="dataResult">
+            <div className="dataResult-content">
+            {filteredResponse.map((item) => {
+              return(
+                <a className="dataItem" href= {"/group/" + item.name.value} target="_blank">
+                <p>{item.name.value} ({item.year.value})</p>
+              </a>)
+            })}
+            </div>
+          </div>
+        )}
+      </div>
+    </div> 
   );
 }
 

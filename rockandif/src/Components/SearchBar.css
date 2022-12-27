@@ -1,12 +1,17 @@
 .search{
   justify-content: center;
   align-items: center;
+  display: flex;
+}
+
+.searchContent {
+  display: column;
 }
 
 .searchInputs {
     margin-top: 105px;
+    width: 300px;
     display: flex;
-    justify-content: center;
     align-items: center;
   }
   
@@ -37,14 +42,13 @@ input:focus {
   
 .dataResult {
   position: relative;
+  margin-left: 2px;
   display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .dataResult-content{
-  width: 400px;
-  height: 200px;
+  width: 85%;
+  max-height: 200px;
   background-color: white;
   box-shadow: rgba(37, 0, 0, 0.35) 0px 5px 15px;
   overflow: hidden;
