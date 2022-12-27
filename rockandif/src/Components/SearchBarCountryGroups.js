@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import './SearchBar.css'
 import SearchIcon from "@mui/icons-material/Search";
-import CloseIcon from "@mui/icons-material/Close";
 import GroupCard from './GroupCard';
 
 function SearchBarCountryGroups({ placeholder,countryName }) {
@@ -76,6 +75,7 @@ function SearchBarCountryGroups({ placeholder,countryName }) {
 
 
   return (
+    <div>
     <div className="search">
       <div className="searchInputs">
         <input
@@ -88,8 +88,9 @@ function SearchBarCountryGroups({ placeholder,countryName }) {
             <SearchIcon />
         </div>
       </div>
+      </div>
       {filteredResponse.length != 0 && (
-        <div className="groupcards">
+        <div className="groupcards-bloc">
           {filteredResponse.map((item) => {
             return(
               <GroupCard nom={item.name.value}></GroupCard>

@@ -1,5 +1,4 @@
 import Header from '../Components/Header';
-import './FrenchGroupsPage.css';
 import SearchBarCountryGroups from '../Components/SearchBarCountryGroups';
 
 function FrenchGroupsPage() {
