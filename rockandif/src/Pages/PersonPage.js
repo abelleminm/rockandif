@@ -74,9 +74,11 @@ function PersonPage() {
             )
           })}
           {filteredResponse.map((item)=>{
-            return(
-              <text id="nomNaissancePerson">{item.bname.value}</text>
-            )
+            if(item.bname.value =! null) {
+              return(
+                <text id="nomNaissancePerson">{item.bname.value}</text>
+              )
+            }
           })}
           <text id="datePerson">Date début activité - Date fin activité</text>
           <text id="nationalitePerson">Nationalité</text>
