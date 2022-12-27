@@ -30,8 +30,9 @@ function HeaderMenu() {
                     'aria-labelledby': 'boutonMenu',
                 }}
             >
+                <MenuItem onClick={handleClose}><Link to="/">Home</Link></MenuItem>
                 <MenuItem onClick={handleClose}><Link to="/french-groups">French groups</Link></MenuItem>
-                <MenuItem onClick={handleClose}><Link to="/moroccan-groups">Maroccan groups</Link></MenuItem>
+                <MenuItem onClick={handleClose}><Link to="/moroccan-groups">Moroccan groups</Link></MenuItem>
                 <MenuItem onClick={handleClose}>HELP (easter egg)</MenuItem>
             </Menu>
         </div>
