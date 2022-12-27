@@ -26,13 +26,12 @@ function SinglePage() {
   { ?artiste a dbo:Band. } UNION { ?artiste a dbo:Artist. }\
   OPTIONAL { ?song  dbp:award ?award. }\
   OPTIONAL { ?song  dbp:label ?label. }\
-  OPTIONAL { ?song  dbp:genre ?genreurl. }\
+  OPTIONAL { ?song  dbp:genre ?genre. }\
   ?artiste dbp:name ?artist.\
   ?albumurl dbp:name ?album.\
-  ?genreurl dbp:name ?genre.\
   FILTER(langMatches(lang(?abstract),"EN") && regex(lcase(str(?artist)),"'+band.toLowerCase()+'.*") && regex(lcase(str(?name)),"'+title.toLowerCase()+'.*") && regex(lcase(str(?album)), "'+album.toLowerCase()+'.*"))\
   }\
-  LIMIT 50';
+  ORDER BY ASC(?name) LIMIT 1';
 
   let request = prefixRq + reqSingle;
 
@@ -109,6 +108,8 @@ function SinglePage() {
           {filteredResponse.map((item)=>{
             if(item.genre != null) {
               var genres = item.genre.value.split("*");
+              genres = genres.map((genre)=>genre.replace("http://dbpedia.org/resource/",""));
+              genres = genres.map((genre)=>genre.replace("_"," "));
               return(
                 <div id="genreSingleDiv">
                   <h3 id="genreSingleTitle">Genre</h3>
@@ -157,6 +158,8 @@ function SinglePage() {
           {filteredResponse.map((item)=>{
             if(item.label != null) {
               var labels = item.label.value.split("*");
+              labels = labels.map((label)=>label.replace("http://dbpedia.org/resource/",""));
+              labels = labels.map((label)=>label.replace("_"," "));
               return(
                 <div id="labelSingleDiv">
                   <h3 id="labelSingleTitle">Label</h3>
