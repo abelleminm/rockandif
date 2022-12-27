@@ -1,4 +1,4 @@
-#group{
+#group {
     border: 2px solid black;
     display: grid;
     grid-template-columns: 1fr;
@@ -9,17 +9,17 @@
     height: 300px;
 }
 
-#group:hover{
+#group:hover {
     box-shadow: 5px 5px 5px #888888;
     transform: scale(1.05);
 }
 
-#photo{
+#photo {
     background-image: url('../Images/Logo.PNG');
     grid-row: 1/5;
 }
 
-#nom{
+#nom {
     grid-row: 5;
     font-weight: bold;
     font-size: large;
@@ -27,7 +27,16 @@
     text-decoration: none;
 }
 
-#nom:hover{
+#nom:hover {
     color: red;
     text-decoration: underline;
+}
+
+
+.groupcards-bloc {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content:center;
+    align-items: center;
+    grid-gap: 20px;
 }
