@@ -26,9 +26,10 @@ function SinglePage() {
   { ?artiste a dbo:Band. } UNION { ?artiste a dbo:Artist. }\
   OPTIONAL { ?song  dbp:award ?award. }\
   OPTIONAL { ?song  dbp:label ?label. }\
-  OPTIONAL { ?song  dbp:genre ?genre. }\
+  OPTIONAL { ?song  dbp:genre ?genreurl. }\
   ?artiste dbp:name ?artist.\
   ?albumurl dbp:name ?album.\
+  ?genreurl dbp:name ?genre.\
   FILTER(langMatches(lang(?abstract),"EN") && regex(lcase(str(?artist)),"'+band.toLowerCase()+'.*") && regex(lcase(str(?name)),"'+title.toLowerCase()+'.*") && regex(lcase(str(?album)), "'+album.toLowerCase()+'.*"))\
   }\
   LIMIT 50';
