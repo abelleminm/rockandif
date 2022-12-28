@@ -31,7 +31,7 @@ function SinglePage() {
   ?albumurl dbp:name ?album.\
   FILTER(langMatches(lang(?abstract),"EN") && regex(lcase(str(?artist)),"'+band.toLowerCase()+'.*") && regex(lcase(str(?name)),"'+title.toLowerCase()+'.*") && regex(lcase(str(?album)), "'+album.toLowerCase()+'.*"))\
   }\
-  LIMIT 50';
+  ORDER BY ASC(?name) LIMIT 1';
 
   let request = prefixRq + reqSingle;
 
@@ -88,15 +88,15 @@ function SinglePage() {
           })}
           {filteredResponse.map((item)=>{
             if(item.relDate != null) { 
-              return(
-                <text id="dateSingle">{item.relDate.value}</text>
-              )
-            } else {
-              return(
-                <text id="dateSingle">Unknown released Date</text>
-              )
-            }
-          })}
+                return(
+                  <text id="dateSingle">{item.relDate.value}</text>
+                )
+              } else {
+                return(
+                  <text id="dateSingle">Unknown released Date</text>
+                )
+              }
+            })}
           {filteredResponse.map((item)=>{
             return(
               <div id="descriptionSingleDiv">
@@ -108,6 +108,8 @@ function SinglePage() {
           {filteredResponse.map((item)=>{
             if(item.genre != null) {
               var genres = item.genre.value.split("*");
+              genres = genres.map((genre)=>genre.replace("http://dbpedia.org/resource/",""));
+              genres = genres.map((genre)=>genre.replace("_"," "));
               return(
                 <div id="genreSingleDiv">
                   <h3 id="genreSingleTitle">Genre</h3>
@@ -156,6 +158,8 @@ function SinglePage() {
           {filteredResponse.map((item)=>{
             if(item.label != null) {
               var labels = item.label.value.split("*");
+              labels = labels.map((label)=>label.replace("http://dbpedia.org/resource/",""));
+              labels = labels.map((label)=>label.replace("_"," "));
               return(
                 <div id="labelSingleDiv">
                   <h3 id="labelSingleTitle">Label</h3>

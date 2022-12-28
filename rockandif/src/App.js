@@ -17,7 +17,7 @@ function App() {
         <Route path="group/:nom" element={<GroupPage />} />
         <Route path="album/:band/:nom" element={<AlbumPage />} />
         <Route path="/" element={<HomePage />} />
-        <Route path="person" element={<PersonPage nom="Gwen" />} />
+        <Route path="person/:nom" element={<PersonPage/>} />
         <Route path="single/:band/:album/:title" element={<SinglePage/>} />
         <Route path="french-groups" element={<FrenchGroupsPage />} />
         <Route path="moroccan-groups" element={<MoroccanGroupsPage />} />
