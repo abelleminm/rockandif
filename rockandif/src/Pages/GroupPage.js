@@ -32,13 +32,12 @@ class GroupPage extends React.Component {
     let reqBand_beg = 'SELECT DISTINCT ?g ?name ?abstract ?year ?origin (GROUP_CONCAT(DISTINCT ?genre; separator=" ; ") AS ?genre) WHERE {\
       ?g a dbo:Band; dbo:genre ?genre.\
       ?g foaf:name ?name.\
-      ?g dbo:abstract ?abstract. \
-      ?g dbo:activeYearsStartYear ?year. \
-      ?g dbp:origin ?origin \
-      FILTER(langMatches(lang(?name),"en") && regex(?genre, "[Rr]ock") \
-      && langMatches(lang(?abstract),"en") && regex(lcase(str(?name)), "';
-      
-    let reqBand_end = '*"))} ORDER BY ASC(?name) LIMIT 10';
+      ?g dbo:abstract ?abstract.\
+      ?g dbo:activeYearsStartYear ?year.\
+      ?g dbp:origin ?origin\
+      FILTER(langMatches(lang(?name),"en") && regex(?genre, "[Rr]ock")\
+      && langMatches(lang(?abstract),"en")) FILTER(lcase(str(?name)) = "'
+    let reqBand_end = '")} ORDER BY ASC(?name)';
 
     
     var request = prefixRq + reqBand_beg + nom.toLowerCase() + reqBand_end; 
