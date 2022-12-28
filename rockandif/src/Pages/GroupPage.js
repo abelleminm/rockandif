@@ -73,23 +73,15 @@ class GroupPage extends React.Component {
     xmlhttp.open("GET", url, true);
     xmlhttp.send();
   } 
-  getElementsFromRequest(response) {
-    console.log("************ START getElementsFromRequest ***************"); 
-    this.setState({filteredResponse: response});
-      response.map(item  => {
-        console.log("item name: " + item.name.value); 
-      }); 
-    console.log("************ END getElementsFromRequest ***************"); 
-  }
 
   findAlbums(bandName){
-    const reqAlbum = 'SELECT ?a ?abstract ?name ?artist (GROUP_CONCAT(DISTINCT ?award ; separator="*") AS ?awards) ?sales ?reldate (GROUP_CONCAT(DISTINCT ?titleName ; separator="*") AS ?titlesLink) (GROUP_CONCAT(DISTINCT ?title1 ; separator="*") AS ?titles) WHERE {\
+   const reqAlbum = 'SELECT ?a ?abstract ?name ?artist (GROUP_CONCAT(DISTINCT ?award ; separator="*") AS ?awards) ?sales ?reldate (GROUP_CONCAT(DISTINCT ?titleName ; separator="*") AS ?titlesLink) (GROUP_CONCAT(DISTINCT ?title1 ; separator="*") AS ?titles) WHERE {\
       ?a a dbo:Album; dbo:abstract ?abstract; dbp:artist ?artiste; dbp:name ?name; dbp:award ?award.\
       { ?artiste a dbo:Band. } UNION { ?artiste a dbo:Artist. }\
       OPTIONAL { ?a dbp:salesamount ?sales. }\
       OPTIONAL { ?a dbp:released ?reldate. }\
       OPTIONAL { ?a dbp:title ?title1. }\
-      OPTIONAL { ?a dbp:title ?title2. }\
+      OPTIONAL { ?a dbp :title ?title2. }\
       ?title2 dbp:name ?titleName.\
       ?artiste dbp:name ?artist.\
       FILTER(langMatches(lang(?abstract),"EN"))\
@@ -121,14 +113,15 @@ class GroupPage extends React.Component {
     xmlhttp.open("GET", url, true);
     xmlhttp.send();
   }
+
+  findSingles(bandName){
+
+  }
   render() {
   return (
     <div id="groupPage">
       <Header titre={"Group: " + this.state.nom} />
-      {this.state.filteredResponse.length != 0 && 
-       this.state.filteredResponse.map((item) => {
-        console.log("name:" +  item.name.value); 
-      }) 
+      {this.state.filteredResponse.length != 0 
       &&(
         <div id="groupPageContent">
           <div id="photoGroup"/>
@@ -140,14 +133,10 @@ class GroupPage extends React.Component {
                 {this.state.filteredResponse[0].year.value}
               </p>
             </div>
-          
-          {this.state.filteredResponse.map(item => {
-            return(
-              <div id="origineGroup">
+            <div id="origineGroup">
                 {this.state.filteredResponse[0].origin.value}
             </div>
-            ); 
-          })}
+
           <div id="descriptionGroup">
             <h3>Description Group</h3>
             <p>
@@ -159,7 +148,7 @@ class GroupPage extends React.Component {
            <h3>Members</h3>
             {this.state.filteredResponse[0].members.value.split(';').map(member => {
               return(                
-                <p>
+                <p key = {member}>
                 {member}
                 </p>
               ); 
@@ -169,20 +158,22 @@ class GroupPage extends React.Component {
             <h3>Style(s)</h3>    
             {this.state.filteredResponse[0].genre.value.split(';').map(style => {
               return(                
-                <p>
+                <p key={style}>
                 {style}
                 </p>
               ); 
             })}     
           </div>
           
-          <div id="singlesGroup">Singles</div>
+          <div id="singlesGroup">
+            <h3>Singles</h3>
+          </div>
           <div id="labelGroup">Label</div>
           <div id="albumsGroup">
             <h3>Albums:</h3>
           {this.state.filteredAlbumResponse.map(item => {
             return(
-            <a class= "link"href= {"/album/" + this.props.params.nom + "/" + item.name.value}><p>{item.name.value}</p></a>
+            <a key = {item.name.value} class= "link"href= {"/album/" + this.props.params.nom + "/" + item.name.value}><p>{item.name.value}</p></a>
 
             ); 
           })}
