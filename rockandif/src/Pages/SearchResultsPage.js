@@ -98,10 +98,12 @@ function SearchResultsPage() {
     <div id="searchResultsPage" >
       <Header titre={titre} />
       {filteredResponse.length != 0 && (
-        <div id="searchResultsPageContent">
+        <div class="groupcards-bloc">
           {filteredResponse.map((item) => {
             return(
-              <GroupCard nom={item.name.value} />)
+              <div class="groupcard">
+              <GroupCard nom={item.name.value} />
+              </div>)
           })}
         </div>
       )}
