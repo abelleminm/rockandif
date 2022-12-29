@@ -31,8 +31,7 @@ class GroupPage extends React.Component {
       ?g dbo:abstract ?abstract. \
       ?g dbo:activeYearsStartYear ?year. \
       ?g dbp:origin ?origin \
-      OPTIONAL { ?g dbo:bandMember|dbo:formerBandMember ?p. } \
-      OPTIONAL { ?p dbp:name ?nameMember. } \
+      OPTIONAL {?g dbp:currentMembers ?nameMember}\
       FILTER(langMatches(lang(?name),"en") && regex(?genre, "[Rr]ock") \
       && langMatches(lang(?abstract),"en") && regex(lcase(str(?name)), "^';
       
@@ -81,7 +80,7 @@ class GroupPage extends React.Component {
       OPTIONAL { ?a dbp:salesamount ?sales. }\
       OPTIONAL { ?a dbp:released ?reldate. }\
       OPTIONAL { ?a dbp:title ?title1. }\
-      OPTIONAL { ?a dbp :title ?title2. }\
+      OPTIONAL { ?a dbp:title ?title2. }\
       ?title2 dbp:name ?titleName.\
       ?artiste dbp:name ?artist.\
       FILTER(langMatches(lang(?abstract),"EN"))\
@@ -146,19 +145,49 @@ class GroupPage extends React.Component {
 
           <div id="membresGroup">
            <h3>Members</h3>
-            {this.state.filteredResponse[0].members.value.split(';').map(member => {
-              return(                
-                <p key = {member}>
+           <ul>
+            {this.state.filteredResponse[0].members.value.split(';').map((member, index) => {
+             return(
+              <div>
+              {  member.includes("*") &&  member.split("*").map((etoileMember, etoileIndex) => {
+                    console.log("splitted - index:" + etoileIndex + " => "  + etoileMember); 
+                    if(etoileMember !== " " && etoileMember !== "" )
+                      return(                
+                        <li key = {etoileIndex}>
+                        {etoileMember}
+                        </li>
+                      )
+                    
+                     
+                  })
+              // in some cases we have a string containing members with a '*' between them straight from the result of dbpedia.
+                // if(){
+                //   console.log("************** inside the * member case");
+
+                //   // return(                
+                  
+                //   // );
+                  
+                // }
+                // else {
+                 
+                // } 
+              }
+              {! member.includes("*") && 
+                <li key = {index}>
                 {member}
-                </p>
-              ); 
+                </li>
+              }
+                </div>
+             ); 
             })}
+            </ul>
           </div>
           <div id="styleGroup">
             <h3>Style(s)</h3>    
-            {this.state.filteredResponse[0].genre.value.split(';').map(style => {
+            {this.state.filteredResponse[0].genre.value.split(';').map((style, index) => {
               return(                
-                <p key={style}>
+                <p key={index}>
                 {style}
                 </p>
               ); 
@@ -171,9 +200,9 @@ class GroupPage extends React.Component {
           <div id="labelGroup">Label</div>
           <div id="albumsGroup">
             <h3>Albums:</h3>
-          {this.state.filteredAlbumResponse.map(item => {
+          {this.state.filteredAlbumResponse.map((item, index) => {
             return(
-            <a key = {item.name.value} class= "link"href= {"/album/" + this.props.params.nom + "/" + item.name.value}><p>{item.name.value}</p></a>
+            <a key = {index} className= "link"href= {"/album/" + this.props.params.nom + "/" + item.name.value}><p>{item.name.value}</p></a>
 
             ); 
           })}
