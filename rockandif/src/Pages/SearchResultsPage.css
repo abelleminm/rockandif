@@ -1,9 +1,9 @@
-#searchResultsPageContent{
-    display: grid;
-    grid-template-rows: repeat(var(--rowNum), var(--gridHeight));
-    grid-template-columns: repeat(5, 1fr);
-    grid-gap: 10px;
-    padding: 10px;
+.groupcard{
+    /*limit to 5 cards per row */
+    flex-basis: 17%;
+    display: flex;
+    text-align: center;
+    justify-content: center;
 }
 
 #pageNumberText{
