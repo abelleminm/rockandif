@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import Header from '../Components/Header';
 import { useParams } from 'react-router-dom';
 import './GroupPage.css';
+import Photo from '../Components/Photo.js'
 class GroupPage extends React.Component {
   constructor(props){
     super(props); 
@@ -85,7 +86,7 @@ class GroupPage extends React.Component {
       }) 
       &&(
         <div id="groupPageContent">
-          <div id="photoGroup"/>
+          <Photo nom={this.props.params.nom}/>
           <div id="nomGroupe">{this.state.nom}</div>
           <div id="dateGroup"></div>
           {this.state.filteredResponse.map(item => {
