@@ -9,6 +9,7 @@ import MoroccanGroupsPage from './Pages/MoroccanGroupsPage';
 import { Routes, Route } from 'react-router-dom';
 import SearchResultsPage from './Pages/SearchResultsPage';
 import PageNotFound from './Pages/PageNotFound';
+import HelpPage from './Pages/HelpPage';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <Route path="person/:nom" element={<PersonPage/>} />
         <Route path="single/:band/:album/:title" element={<SinglePage/>} />
         <Route path="french-groups" element={<FrenchGroupsPage />} />
+        <Route path="help" element={<HelpPage />} />
         <Route path="moroccan-groups" element={<MoroccanGroupsPage />} />
         <Route path="search/:type/:text/:number" element={<SearchResultsPage />} />
         <Route path="*" element={<PageNotFound />} />
