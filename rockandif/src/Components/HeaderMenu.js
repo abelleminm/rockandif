@@ -4,9 +4,14 @@ import MenuItem from "@mui/material/MenuItem";
 import { Fab} from "@mui/material";
 import Menu from "@mui/material/Menu";
 import { Link } from 'react-router-dom';
+import ScriptTag from 'react-script-tag';
+import script1 from "../scripts/gravity/script1";
+import script2 from "../scripts/gravity/script2.js";
+import box2djs from "../scripts/gravity/box2djs";
 
 function HeaderMenu() {
     const [anchorEl, setAnchorEl] = React.useState(null);
+    const [gravityScripts, setGravity] = React.useState(null);
     const open = Boolean(anchorEl);
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -14,6 +19,14 @@ function HeaderMenu() {
     const handleClose = () => {
         setAnchorEl(null);
     };
+
+    const easterEgg = () =>{
+        setGravity(<> <ScriptTag>{script1}</ScriptTag>
+        <ScriptTag>{box2djs}</ScriptTag>
+        <ScriptTag>{script2}</ScriptTag></>);
+        handleClose();
+    };
+
 
     return (
         <div>
@@ -33,8 +46,9 @@ function HeaderMenu() {
                 <MenuItem onClick={handleClose}><Link to="/">Home</Link></MenuItem>
                 <MenuItem onClick={handleClose}><Link to="/french-groups">French groups</Link></MenuItem>
                 <MenuItem onClick={handleClose}><Link to="/moroccan-groups">Moroccan groups</Link></MenuItem>
-                <MenuItem onClick={handleClose}><Link to="/help">Help</Link></MenuItem>
+                <MenuItem onClick={easterEgg}>HELP (easter egg)</MenuItem>
             </Menu>
+            {gravityScripts}
         </div>
     );
 }
