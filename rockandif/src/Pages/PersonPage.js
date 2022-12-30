@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Header from '../Components/Header';
 import './PersonPage.css';
 import { useParams } from 'react-router-dom';
+import Photo from '../Components/Photo';
 
 function PersonPage() {
   const [filteredResponse, setFilteredResponse] = useState([]);
@@ -38,7 +39,7 @@ function PersonPage() {
       // Encodage de l'URL à transmettre à DBPedia
       var url_base = "http://dbpedia.org/sparql";
       var url = url_base + "?query=" + encodeURIComponent(request) + "&format=json";
-  
+
       // Requête HTTP et affichage des résultats
       var xmlhttp = new XMLHttpRequest();
       xmlhttp.onreadystatechange = function() {
@@ -67,7 +68,7 @@ function PersonPage() {
       <Header titre={titrePage} />
       {filteredResponse.length != 0 && (
         <div id="personPageContent">
-          <div id="photoPerson"/>
+          <Photo nom={nom} fromPage={window.location.pathname}/>
           {filteredResponse.map((item)=>{
             return(
               <text id="nomPerson">{item.name.value}</text>

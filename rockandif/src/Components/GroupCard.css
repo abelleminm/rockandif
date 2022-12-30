@@ -18,9 +18,15 @@
     transform: scale(1.05);
 }
 
-#photo {
+#photoErr {
     background-image: url('../Images/Logo.PNG');
     grid-row: 1/5;
+}
+
+#photo {
+    width: 80%;
+    height: auto;
+    margin: auto;
 }
 
 #nom {
