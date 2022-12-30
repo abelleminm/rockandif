@@ -98,3 +98,10 @@
 #albumsGroup:hover{
     box-shadow: 5px 5px 5px #888888;
 }
+
+.link {
+    text-decoration:  underline;
+}
+.link:hover {
+    color: red;
+}

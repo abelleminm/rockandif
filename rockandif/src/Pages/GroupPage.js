@@ -8,18 +8,12 @@ class GroupPage extends React.Component {
     super(props); 
     this.state = {
       filteredResponse: [], 
+      filteredAlbumResponse: [],
       wordEntered: "", 
       request: "", 
       nom: ""
     }
-  }
-  componentDidMount(){
-    this.setState({nom: this.props.params.nom}); 
-    this.rechercher(this.props.params.nom);      
-  }
-
-  rechercher(nom){
-    let prefixRq = 'PREFIX owl: <http://www.w3.org/2002/07/owl#>\n '+
+    this.prefixRq = 'PREFIX owl: <http://www.w3.org/2002/07/owl#>\n '+
     'PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n '+
     'PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n '+
     'PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n '+
@@ -30,19 +24,30 @@ class GroupPage extends React.Component {
     'PREFIX dbpedia: <http://dbpedia.org/>\n '+
     'PREFIX skos: <http://www.w3.org/2004/02/skos/core#>\n ';
 
-    let reqBand_beg = 'SELECT DISTINCT ?g ?name ?abstract ?year ?origin (GROUP_CONCAT(DISTINCT ?genre; separator=" ; ") AS ?genre) WHERE {\
+    this.reqBand_beg = 'SELECT DISTINCT ?g ?name ?abstract ?year ?origin  \
+    (GROUP_CONCAT(DISTINCT ?genreName; separator=" ; ") AS ?genre) (GROUP_CONCAT(DISTINCT ?nameMember; separator=" ; ") AS ?members)  WHERE {\
       ?g a dbo:Band; dbo:genre ?genre.\
+      ?genre foaf:name ?genreName.\
       ?g foaf:name ?name.\
       ?g dbo:abstract ?abstract. \
       ?g dbo:activeYearsStartYear ?year. \
       ?g dbp:origin ?origin \
+      OPTIONAL {?g dbp:currentMembers ?nameMember}\
       FILTER(langMatches(lang(?name),"en") && regex(?genre, "[Rr]ock") \
-      && langMatches(lang(?abstract),"en") && regex(lcase(str(?name)), "';
+      && langMatches(lang(?abstract),"en") && regex(lcase(str(?name)), "^';
       
-    let reqBand_end = '*"))} ORDER BY ASC(?name) LIMIT 10';
+    this.reqBand_end = '$"))} ORDER BY ASC(?name) LIMIT 10';
 
-    
-    var request = prefixRq + reqBand_beg + nom.toLowerCase() + reqBand_end; 
+
+  }
+  componentDidMount(){
+    this.setState({nom: this.props.params.nom}); 
+    this.rechercher(this.props.params.nom);      
+    this.findAlbums(this.props.params.nom);
+  }
+
+  rechercher(nom){
+    var request = this.prefixRq + this.reqBand_beg + nom.toLowerCase() + this.reqBand_end; 
     console.log("print out " + request);
     // Encodage de l'URL à transmettre à DBPedia
     var url_base = "http://dbpedia.org/sparql";
@@ -67,70 +72,142 @@ class GroupPage extends React.Component {
     }
     xmlhttp.open("GET", url, true);
     xmlhttp.send();
+  } 
+
+  findAlbums(bandName){
+   const reqAlbum = 'SELECT ?a ?abstract ?name ?artist (GROUP_CONCAT(DISTINCT ?award ; separator="*") AS ?awards) ?sales ?reldate (GROUP_CONCAT(DISTINCT ?titleName ; separator="*") AS ?titlesLink) (GROUP_CONCAT(DISTINCT ?title1 ; separator="*") AS ?titles) WHERE {\
+      ?a a dbo:Album; dbo:abstract ?abstract; dbp:artist ?artiste; dbp:name ?name; dbp:award ?award.\
+      { ?artiste a dbo:Band. } UNION { ?artiste a dbo:Artist. }\
+      OPTIONAL { ?a dbp:salesamount ?sales. }\
+      OPTIONAL { ?a dbp:released ?reldate. }\
+      OPTIONAL { ?a dbp:title ?title1. }\
+      OPTIONAL { ?a dbp:title ?title2. }\
+      ?title2 dbp:name ?titleName.\
+      ?artiste dbp:name ?artist.\
+      FILTER(langMatches(lang(?abstract),"EN"))\
+      FILTER(regex(lcase(str(?artist)),"'+bandName.toLowerCase()+'"))\
+      }\
+      LIMIT 10';
+      var request = this.prefixRq + reqAlbum ; 
+      console.log("request for albums:  " + reqAlbum);
+      var url_base = "http://dbpedia.org/sparql";
+    var url = url_base + "?query=" + encodeURIComponent(request) + "&format=json";
+
+    // Requête HTTP et affichage des résultats
+    var xmlhttp = new XMLHttpRequest();
+    var response  = []; 
+    var that = this; 
+    xmlhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        console.log("readyState : " + this.readyState + ", status: " + this.status);     
+        console.log("response lenght " + JSON.parse(this.responseText).results.bindings.length);
+        response = JSON.parse(this.responseText).results.bindings; 
+        that.setState({filteredAlbumResponse: response}); 
+      }
+      
+    };
+    console.log("response length post traitement: " + response.length);
+    if(response.length != 0 ) {
+      this.setState({filteredAlbumResponse: response}); 
+    }
+    xmlhttp.open("GET", url, true);
+    xmlhttp.send();
   }
-  getElementsFromRequest(response) {
-    console.log("************ START getElementsFromRequest ***************"); 
-    this.setState({filteredResponse: response});
-      response.map(item  => {
-        console.log("item name: " + item.name.value); 
-      }); 
-    console.log("************ END getElementsFromRequest ***************"); 
+
+  findSingles(bandName){
+
   }
   render() {
   return (
     <div id="groupPage">
       <Header titre={"Group: " + this.state.nom} />
-      {this.state.filteredResponse.length != 0 && 
-       this.state.filteredResponse.map((item) => {
-        console.log("name:" +  item.name.value); 
-      }) 
+      {this.state.filteredResponse.length != 0 
       &&(
         <div id="groupPageContent">
           <Photo nom={this.props.params.nom} fromPage={window.location.pathname}/>
           <div id="nomGroupe">{this.state.nom}</div>
           <div id="dateGroup"></div>
-          {this.state.filteredResponse.map(item => {
-            return(
               <div id="dateGroup">
               <h3>Date création - Date fin</h3>
               <p>
-                {item.year.value}
+                {this.state.filteredResponse[0].year.value}
               </p>
             </div>
-            ); 
-          })}
-          {this.state.filteredResponse.map(item => {
-            return(
-              <div id="origineGroup">
-                {item.origin.value}
+            <div id="origineGroup">
+                {this.state.filteredResponse[0].origin.value}
             </div>
-            ); 
-          })}
-          {this.state.filteredResponse.map(item => {
-            return(
-              <div id="descriptionGroup">
-              <h3>Description Group</h3>
-              <p>
-                {item.abstract.value}
-              </p>
-            </div>
-            ); 
-          })}
-          <div id="membresGroup">Membres</div>
+
+          <div id="descriptionGroup">
+            <h3>Description Group</h3>
+            <p>
+              {this.state.filteredResponse[0].abstract.value}
+            </p>
+          </div>
+
+          <div id="membresGroup">
+           <h3>Members</h3>
+           <ul>
+            {this.state.filteredResponse[0].members.value.split(';').map((member, index) => {
+             return(
+              <div>
+              {  member.includes("*") &&  member.split("*").map((etoileMember, etoileIndex) => {
+                    console.log("splitted - index:" + etoileIndex + " => "  + etoileMember); 
+                    if(etoileMember !== " " && etoileMember !== "" )
+                      return(                
+                        <li key = {etoileIndex}>
+                        {etoileMember}
+                        </li>
+                      )
+                    
+                     
+                  })
+              // in some cases we have a string containing members with a '*' between them straight from the result of dbpedia.
+                // if(){
+                //   console.log("************** inside the * member case");
+
+                //   // return(                
+                  
+                //   // );
+                  
+                // }
+                // else {
+                 
+                // } 
+              }
+              {! member.includes("*") && 
+                <li key = {index}>
+                {member}
+                </li>
+              }
+                </div>
+             ); 
+            })}
+            </ul>
+          </div>
           <div id="styleGroup">
-            <h3>Style</h3>
-            {this.state.filteredResponse.map(item => {
-            return(              
-              <p>
-                {item.genre.value}
-              </p>
+            <h3>Style(s)</h3>    
+            {this.state.filteredResponse[0].genre.value.split(';').map((style, index) => {
+              return(                
+                <p key={index}>
+                {style}
+                </p>
+              ); 
+            })}     
+          </div>
+          
+          <div id="singlesGroup">
+            <h3>Singles</h3>
+          </div>
+          <div id="labelGroup">Label</div>
+          <div id="albumsGroup">
+            <h3>Albums:</h3>
+          {this.state.filteredAlbumResponse.map((item, index) => {
+            return(
+            <a key = {index} className= "link"href= {"/album/" + this.props.params.nom + "/" + item.name.value}><p>{item.name.value}</p></a>
+
             ); 
           })}
           </div>
-          
-          <div id="singlesGroup">Singles</div>
-          <div id="labelGroup">Label</div>
-          <div id="albumsGroup">Albums</div>
       </div> 
       )
       }
