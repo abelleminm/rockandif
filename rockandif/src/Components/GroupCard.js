@@ -7,7 +7,7 @@ function GroupCard({nom}) {
     var link = "/group/" + nom;
     return (
         <div id="group"> 
-            <Photo nom={nom}/>
+            <Photo nom={nom} fromPage={window.location.pathname}/>
             <Link to={link} id="nom">{nom}</Link>
         </div>
     );

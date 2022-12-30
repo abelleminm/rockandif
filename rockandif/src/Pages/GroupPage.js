@@ -86,7 +86,7 @@ class GroupPage extends React.Component {
       }) 
       &&(
         <div id="groupPageContent">
-          <Photo nom={this.props.params.nom}/>
+          <Photo nom={this.props.params.nom} fromPage={window.location.pathname}/>
           <div id="nomGroupe">{this.state.nom}</div>
           <div id="dateGroup"></div>
           {this.state.filteredResponse.map(item => {

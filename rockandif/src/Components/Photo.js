@@ -27,7 +27,7 @@ function Photo({ nom, fromPage }) {
     })
   }, []); 
 
-  console.log("finally:"+imgURL);
+  //console.log("finally:"+imgURL);
 
   // error handling
   if(err) {
@@ -36,7 +36,7 @@ function Photo({ nom, fromPage }) {
     )
   } else {
     return (
-      <img src={imgURL}/>
+      <img id="photo" src={imgURL}/>
     );
   }
 }
@@ -52,8 +52,8 @@ async function sendRequest (nom, choose) {
     "&format=json";
   
   const response = await fetch(url).then(res => res.json())
-  //console.log("response:" + response.results.bindings[0].url.value);
-  if( response.length === 0 ) { // if nothing was found = error : we return null
+  //console.log("response:" + response.results.bindings[0].url.value + " length : " + JSON.stringify(response).length);
+  if( JSON.stringify(response).length === 0 ) { // if nothing was found = error : we return null
     return null;
   } else {
     return response.results.bindings[0].url.value;
@@ -69,16 +69,22 @@ async function getPhoto (wiki) {
 
   const response = await fetch(req).then(res => res.json());
   //console.log("response:" + JSON.stringify(response));
+  const str = JSON.stringify(response);
+  //console.log(str.length);
   let finalSrc;
-  if( response.length === 0 ) {
-    finalSrc = null;
-  } else {
-    const str = JSON.stringify(response);
+  if( str.length ) {
     const regex = /"source":"(.*)",/g;
     const src = regex.exec(str);
-    finalSrc = src[1];
-    console.log("src:"+src);
-    console.log("finalSrc:"+finalSrc);
+    //console.log(src);
+    if( src === null ) {
+      finalSrc = null;
+    } else {
+      finalSrc = src[1];
+      //console.log("src:"+src);
+      //console.log("finalSrc:"+finalSrc);
+    }
+  } else {
+    finalSrc = null;
   }
 
   return finalSrc;
