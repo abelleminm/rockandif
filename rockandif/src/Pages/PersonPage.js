@@ -20,16 +20,35 @@ function PersonPage() {
   'PREFIX dbpedia: <http://dbpedia.org/>\n '+
   'PREFIX skos: <http://www.w3.org/2004/02/skos/core#>\n ';
 
-  const reqArtist = 'SELECT ?p ?abstract ?name ?bname ?bd ?town ?death ?dtown WHERE {\
-    ?p a dbo:Artist; dbp:name ?name; dbo:abstract ?abstract; dbo:birthDate ?bd; dbo:birthPlace ?bp.\
-    OPTIONAL { ?p dbo:deathDate ?death. }\
-    OPTIONAL { ?p dbo:deathPlace ?deathtown. }\
-    OPTIONAL { ?p dbo:birthName ?bname. }\
-    ?bp dbp:name ?town.\
-    ?deathtown dbp:name ?dtown.\
+  const reqArtist = 
+    'SELECT ?p ?abstract ?name ?bname ?bd ?bp ?btown ?death ?deathtown ?dtown WHERE {\
+    ?p a dbo:MusicalArtist; rdfs:label ?name; dbo:abstract ?abstract; dbp:birthDate ?bd.\
+    OPTIONAL {\
+    ?p dbp:birthPlace ?bp.\
     FILTER NOT EXISTS {?bp a dbo:Country.}\
+    }\
+    OPTIONAL {\
+    ?p dbp:birthPlace ?birthp.\
+    FILTER NOT EXISTS {?birthp a dbo:Country.}\
+    ?birthp rdfs:label ?btown.\
+    FILTER(langMatches(lang(?btown),"EN"))\
+    }\
+    OPTIONAL { ?p dbp:deathDate ?death. }\
+    OPTIONAL {\
+    ?p dbp:deathPlace ?deathtown.\
     FILTER NOT EXISTS {?deathtown a dbo:Country.}\
-    FILTER(langMatches(lang(?abstract),"EN") && langMatches(lang(?name),"EN") && langMatches(lang(?bname),"EN"))\
+    }\
+    OPTIONAL {\
+    ?p dbp:deathPlace ?dt.\
+    FILTER NOT EXISTS {?dt a dbo:Country.}\
+    ?dt rdfs:label ?dtown.\
+    FILTER(langMatches(lang(?dtown),"EN"))\
+    }\
+    OPTIONAL {\
+    ?p dbp:birthName ?bname.\
+    FILTER(langMatches(lang(?bname),"EN"))\
+    }\
+    FILTER(langMatches(lang(?abstract),"EN") && langMatches(lang(?name),"EN"))\
     FILTER (regex(lcase(str(?name)), "'+nom.toLowerCase()+'"))\
     }';
 
@@ -75,10 +94,15 @@ function PersonPage() {
             )
           })}
           {filteredResponse.map((item)=>{
-            if(item.bname.value =! null) {
+            if(item.bname != null) {
               return(
                 <text id="nomNaissancePerson">{item.bname.value}</text>
               )
+            }
+            else{
+              return(
+                <text id="nomNaissancePerson">Unknown BirthName</text>
+              )  
             }
           })}
           <text id="datePerson">Date début activité - Date fin activité</text>
@@ -90,16 +114,22 @@ function PersonPage() {
           })}
           {filteredResponse.map((item)=>{
             var deathTown = "";
-            var birthTwon = "";
-            if(item.dtown.value != null){
+            var birthTown = "";
+            if(item.dtown != null){
               deathTown = " in "+item.dtown.value;
             }
-            if(item.town.value != null){
-              birthTwon = " in "+item.town.value;
+            else if(item.deathtown != null){
+              deathTown = " in "+item.deathtown.value;
             }
-            var lifeDeath = item.name.value+" was born on "+item.bd.value+birthTwon+" and died on "+item.death.value+deathTown;
-            var life = item.name.value+" was born on "+item.bd.value+birthTwon;
-            if(item.death.value != null){
+            if(item.btown != null){
+              birthTown = " in "+item.btown.value;
+            }
+            else if(item.bp != null){
+              birthTown = " in "+item.bp.value;
+            }
+            var lifeDeath = item.name.value+" was born on "+item.bd.value+birthTown+" and died on "+item.death.value+deathTown;
+            var life = item.name.value+" was born on "+item.bd.value+birthTown;
+            if(item.death != null){
               return(
                 <div id="viePerson">
                   <h3>{item.bd.value} - {item.death.value}</h3>
