@@ -63,11 +63,6 @@ function SearchBarCountryGroups({ placeholder,countryName }) {
     xmlhttp.send();
   }
 
-  const clearInput = () => {
-    setFilteredResponse([]);
-    setWordEntered("");
-  };
-
   //affichage de tous les groupes français au chargement de la page
   useEffect(() => {
     sendRequest("");
