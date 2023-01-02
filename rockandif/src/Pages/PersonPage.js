@@ -127,9 +127,8 @@ function PersonPage() {
             else if(item.bp != null){
               birthTown = " in "+item.bp.value;
             }
-            var lifeDeath = item.name.value+" was born on "+item.bd.value+birthTown+" and died on "+item.death.value+deathTown;
-            var life = item.name.value+" was born on "+item.bd.value+birthTown;
             if(item.death != null){
+              var lifeDeath = item.name.value+" was born on "+item.bd.value+birthTown+" and died on "+item.death.value+deathTown;
               return(
                 <div id="viePerson">
                   <h3>{item.bd.value} - {item.death.value}</h3>
@@ -138,6 +137,7 @@ function PersonPage() {
               )
             }
             else{
+              var life = item.name.value+" was born on "+item.bd.value+birthTown;
               return(
                 <div id="viePerson">
                   <h3>{item.bd.value} - </h3>
