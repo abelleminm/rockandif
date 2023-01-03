@@ -14,8 +14,8 @@ function Combobox({setFilter}) {
                 <select id="combo" onChange={changeFilter}>
                     <option value="band">Rock Band</option>
                     {/* <option value="album">Album</option>
-                    <option value="single">Single</option>
-                    <option value="member">Member of a band</option> */}
+                    <option value="single">Single</option>*/}
+                    <option value="person">Member of a band</option> 
                     <option value="date">Date of creation</option>
                 </select>
                 <span class="focus"></span>
