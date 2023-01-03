@@ -109,7 +109,7 @@ const defineRequest = (nom, choose) => {
   if(choose === 1) { // photo d'une personne
     req_arg1 = 
       'SELECT ?url WHERE{\
-      ?p a dbo:Artist; dbp:name ?name.\
+      ?p a dbo:MusicalArtist; rdfs:label ?name.\
       ?p foaf:isPrimaryTopicOf ?url.\
       FILTER(regex(?name, "';
     req_arg2 = '$") && regex(?name, "^';

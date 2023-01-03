@@ -14,6 +14,8 @@ function SearchResultsPage() {
     titre = "Search results for '" + wordEntered + "'"; 
   } else if (type === "date") {
     titre = "Search results for the year " + wordEntered; 
+  } else if (type === "person") {
+    titre = "Search results for the musician " + wordEntered;
   }
   var pageNumber = useParams().number;
   var limit = 20;
@@ -44,6 +46,13 @@ function SearchResultsPage() {
     FILTER(year(xsd:date(?year))=';
     const reqDate_end = ')} ORDER BY ASC(?name) OFFSET '+offset +' LIMIT '+limit;
 
+  const reqPerson_beg = 'SELECT DISTINCT ?g ?name (count(?name) as ?number) WHERE {\
+    ?g a dbo:MusicalArtist; dbo:abstract ?abstract.\
+    ?g rdfs:label ?name.\
+    FILTER(langMatches(lang(?name),"en") && regex(?abstract, "[Rr]ock") && strlen(?name)>0 && langMatches(lang(?abstract),"en"))\
+    FILTER(regex(lcase(str(?name)), "';
+  const reqPerson_end = '.*"))}   ORDER BY ASC(?name) OFFSET '+offset +' LIMIT '+limit;
+
     const defineRequest = (typeRe, textRe) => {
     let request = "";
     switch (typeRe) {
@@ -53,6 +62,9 @@ function SearchResultsPage() {
       case "date":
         request = prefixRq + reqDate_beg + textRe + reqDate_end;
         break;
+      case "person":
+        request = prefixRq + reqPerson_beg + textRe + reqPerson_end;
+        break;        
       default:
         request = prefixRq + reqBand_beg + textRe + reqBand_end;
         break;
@@ -102,7 +114,7 @@ function SearchResultsPage() {
           {filteredResponse.map((item) => {
             return(
               <div class="groupcard">
-              <GroupCard nom={item.name.value} />
+              <GroupCard nom={item.name.value} type={type}/>
               </div>)
           })}
         </div>
