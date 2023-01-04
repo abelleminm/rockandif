@@ -79,10 +79,8 @@ function SearchBar({ placeholder, filter }) {
 
   const handleFilter = (event) => {
     let searchWord = event.target.value;
-    console.log("search word : " + searchWord);
     setWordEntered(searchWord);
     searchWord = searchWord.toLowerCase();
-    console.log("search word : " + searchWord);
     sendRequest(searchWord);
   };
 
@@ -97,8 +95,7 @@ function SearchBar({ placeholder, filter }) {
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
           setFilteredResponse(JSON.parse(this.responseText).results.bindings);
-          console.log("filterdResponse: " + filteredResponse);
-          // afficherResultats(filteredRequest);
+          // console.log("filterdResponse: " + filteredResponse);
         }else{
           setFilteredResponse([]);
         }
@@ -137,12 +134,12 @@ function SearchBar({ placeholder, filter }) {
             {filteredResponse.map((item) => {
               if(filter != "person"){
                 return(
-                <a className="dataItem" href= {"/group/" + item.name.value} target="_blank">
+                <a key={item.name.value} className="dataItem" href= {"/group/" + item.name.value} target="_blank">
                 <p>{item.name.value} ({item.year.value})</p>
               </a>)
               } else {
                 return(
-                  <a className="dataItem" href= {"/person/" + item.name.value} target="_blank">
+                  <a key={item.name.value} className="dataItem" href= {"/person/" + item.name.value} target="_blank">
                   <p>{item.name.value} </p>
                 </a>)               
               }

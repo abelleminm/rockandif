@@ -34,11 +34,9 @@ function HomePage() {
   
     // Requête HTTP et affichage des résultats
     var xmlhttp = new XMLHttpRequest();
-    console.log(response);
     xmlhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
         setResponse(JSON.parse(this.responseText).results.bindings[0].rockAbstract.value);
-        console.log(response);
       } else {
         setResponse([]);
       }

@@ -110,10 +110,10 @@ function SearchResultsPage() {
     <div id="searchResultsPage" >
       <Header titre={titre} />
       {filteredResponse.length != 0 && (
-        <div class="groupcards-bloc">
+        <div className="groupcards-bloc">
           {filteredResponse.map((item) => {
             return(
-              <div class="groupcard">
+              <div key={item.g.value} className="groupcard">
               <GroupCard nom={item.name.value} type={type}/>
               </div>)
           })}
