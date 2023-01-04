@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import SearchBar from '../Components/SearchBar';
 import Header from '../Components/Header';
 import Combobox from '../Components/Combobox';
+import './HomePage.css';
 
 function HomePage() {
   const [filter, setFilter] = useState("band");
