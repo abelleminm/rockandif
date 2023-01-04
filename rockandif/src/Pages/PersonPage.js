@@ -5,6 +5,9 @@ import { useParams } from 'react-router-dom';
 import Photo from '../Components/Photo';
 import CurrentGroups from '../Components/CurrentGroups';
 import FormerGroups from '../Components/FormerGroups';
+import Partners from '../Components/Partners';
+import Spouses from '../Components/Spouses';
+import Spouses2 from '../Components/Spouses2';
 
 function PersonPage() {
   const [filteredResponse, setFilteredResponse] = useState([]);
@@ -23,8 +26,20 @@ function PersonPage() {
   'PREFIX skos: <http://www.w3.org/2004/02/skos/core#>\n ';
 
   const reqArtist = 
-    'SELECT ?p ?abstract ?name ?bname ?bd ?bp ?btown ?death ?deathtown ?dtown (GROUP_CONCAT(DISTINCT ?band ; separator="*") AS ?bands) (GROUP_CONCAT(DISTINCT ?formerband ; separator="*") AS ?formerbands) WHERE {\
+    'SELECT ?p ?abstract ?name ?bname ?bd ?bp ?btown ?death ?deathtown ?dtown\
+     (GROUP_CONCAT(DISTINCT ?band ; separator="*") AS ?bands) (GROUP_CONCAT(DISTINCT ?formerband ; separator="*") AS ?formerbands)\
+      (GROUP_CONCAT(DISTINCT ?partner ; separator="*") AS ?partners) (GROUP_CONCAT(DISTINCT ?spouse ; separator="*") AS ?spouses)\
+      (GROUP_CONCAT(DISTINCT ?spouse2 ; separator="*") AS ?spouses2) WHERE {\
     ?p a dbo:MusicalArtist; rdfs:label ?name; dbo:abstract ?abstract; dbp:birthDate ?bd.\
+    OPTIONAL {\
+      ?p dbp:partner ?partner.\
+    }\
+    OPTIONAL {\
+      ?p dbo:spouse ?spouse.\
+    }\
+    OPTIONAL {\
+      ?spouse2 dbo:spouse ?p.\
+    }\
     OPTIONAL {\
       ?formerband1 dbo:formerBandMember ?p.\
       ?formerband1 dbp:name ?formerband.\
@@ -179,8 +194,20 @@ function PersonPage() {
               </div>
             )
           })}
+          {filteredResponse.map((item)=> {
+            console.log(item.partners);
+            console.log(item.spouses);
+            console.log(item.spouses2);
+            return(
+              <div id="partnersPerson">
+              <h3 id="partnersTitle">Partners</h3>
+              <Partners partners={item.partners}></Partners>
+              <Spouses spouses={item.spouses}></Spouses>
+              <Spouses2 spouses2={item.spouses2}></Spouses2>
+              </div>
+            )
+          })}
           <text id="singlesPerson">Singles solo</text>
-          <text id="partnersPerson">Partners</text>
         </div>
       )}      
     </div>
