@@ -5,8 +5,12 @@ function Photo({ nom, fromPage }) {
   const [err, setErr] = useState(0);
 
   let chooseReq;
-  if(fromPage.toString().includes("person")) {
+  if(fromPage.toString().includes("person/")) {
     chooseReq = 1; // on cherche une photo de quelqu'un = 1
+  } if(fromPage.toString().includes("single/")) {
+    chooseReq = 2; // on cherche la cover d'un single = 2
+  } if(fromPage.toString().includes("album/")) {
+    chooseReq = 3; // on cherche la cover d'un album = 3
   } else {
     chooseReq = 0; // pour un groupe (groupCard ou Group) = 0
   }
@@ -113,7 +117,23 @@ const defineRequest = (nom, choose) => {
       ?p foaf:isPrimaryTopicOf ?url.\
       FILTER(regex(?name, "';
     req_arg2 = '$") && regex(?name, "^';
-    req_end = '")) }';
+    req_end = '")) } LIMIT 1';
+  } else if ( choose === 2 ) { // cover d'un single
+    req_arg1 = 
+      'SELECT ?url WHERE {\
+       ?p a dbo:Single; foaf:name ?name.\
+       ?p foaf:isPrimaryTopicOf ?url.\
+       FILTER(regex(?name, "';
+    req_arg2 = '$") && regex(?name, "^'
+    req_end = '")) } LIMIT 1';
+  } else if ( choose === 3 ) { // cover d'un album
+    req_arg1 = 
+      'SELECT ?url WHERE {\
+       ?p a dbo:Album; dbp:name ?name.\
+       ?p foaf:isPrimaryTopicOf ?url.\
+       FILTER(regex(?name, "';
+    req_arg2 = '$") && regex(?name, "^'
+    req_end = '")) } LIMIT 1';
   } else { // photo d'un groupe
     req_arg1 =
     'SELECT ?url WHERE {\
@@ -121,7 +141,7 @@ const defineRequest = (nom, choose) => {
     ?p foaf:isPrimaryTopicOf ?url.\
     FILTER(regex(?name, "';
     req_arg2 = '$") && regex(?name, "^';
-    req_end = '")) }';
+    req_end = '")) } LIMIT 1';
   }
   
   let request = prefixRq + req_arg1 + nom + req_arg2 + nom + req_end;

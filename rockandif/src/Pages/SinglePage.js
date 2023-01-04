@@ -3,6 +3,7 @@ import Header from '../Components/Header';
 import './SinglePage.css';
 import { Link } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
+import Photo from '../Components/Photo';
 
 function SinglePage() {
   const [filteredResponse, setFilteredResponse] = useState([]);
@@ -68,7 +69,7 @@ function SinglePage() {
       <Header titre={titrePage} />
       {filteredResponse.length != 0 && (
         <div id="singlePageContent">
-          <div id="coverSingle"/>
+          <Photo nom={title} fromPage={window.location.pathname}/>
           {filteredResponse.map((item)=>{
             return(
               <text id="nomSingle">{item.name.value}</text>
