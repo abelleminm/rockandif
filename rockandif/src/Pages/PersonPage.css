@@ -74,13 +74,13 @@
     box-shadow: 5px 5px 5px #888888;
 }
 
-#groupesPerson{
+#bandsDiv{
     grid-column: 3;
     grid-row: 6/10;
     border: 2px solid black;
 }
 
-#groupesPerson:hover{
+#bandsDiv:hover{
     box-shadow: 5px 5px 5px #888888;
 }
 

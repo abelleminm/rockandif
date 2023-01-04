@@ -3,6 +3,8 @@ import Header from '../Components/Header';
 import './PersonPage.css';
 import { useParams } from 'react-router-dom';
 import Photo from '../Components/Photo';
+import CurrentGroups from '../Components/CurrentGroups';
+import FormerGroups from '../Components/FormerGroups';
 
 function PersonPage() {
   const [filteredResponse, setFilteredResponse] = useState([]);
@@ -21,8 +23,18 @@ function PersonPage() {
   'PREFIX skos: <http://www.w3.org/2004/02/skos/core#>\n ';
 
   const reqArtist = 
-    'SELECT ?p ?abstract ?name ?bname ?bd ?bp ?btown ?death ?deathtown ?dtown WHERE {\
+    'SELECT ?p ?abstract ?name ?bname ?bd ?bp ?btown ?death ?deathtown ?dtown (GROUP_CONCAT(DISTINCT ?band ; separator="*") AS ?bands) (GROUP_CONCAT(DISTINCT ?formerband ; separator="*") AS ?formerbands) WHERE {\
     ?p a dbo:MusicalArtist; rdfs:label ?name; dbo:abstract ?abstract; dbp:birthDate ?bd.\
+    OPTIONAL {\
+      ?formerband1 dbo:formerBandMember ?p.\
+      ?formerband1 dbp:name ?formerband.\
+      FILTER(langMatches(lang(?formerband),"EN"))\
+    }\
+    OPTIONAL {\
+      ?band1 dbo:bandMember ?p.\
+      ?band1 dbp:name ?band.\
+      FILTER(langMatches(lang(?band),"EN"))\
+    }\
     OPTIONAL {\
     ?p dbp:birthPlace ?bp.\
     FILTER NOT EXISTS {?bp a dbo:Country.}\
@@ -146,7 +158,27 @@ function PersonPage() {
               )
             }
           })}
-          <text id="groupesPerson">Groupes et anciens groupes</text>
+          {filteredResponse.map((item)=> {
+            var bandsIndex = false;
+            var formerBandsIndex = false;
+            var bands;
+            var formerbands;
+
+            if(item.bands.value != "") {
+              bands = item.bands.value.split("*");
+              bandsIndex = true;
+            }
+            if(item.formerbands.value != "") {
+              formerbands = item.formerbands.value.split("*");
+              formerBandsIndex = true;
+            }
+            return(
+              <div id="bandsDiv">
+              <CurrentGroups bandindex={bandsIndex} bands={bands}></CurrentGroups>
+              <FormerGroups formerbandindex={formerBandsIndex} formerbands={formerbands}></FormerGroups>
+              </div>
+            )
+          })}
           <text id="singlesPerson">Singles solo</text>
           <text id="partnersPerson">Partners</text>
         </div>
