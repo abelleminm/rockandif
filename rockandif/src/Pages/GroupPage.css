@@ -5,6 +5,18 @@
     grid-gap: 10px;
     padding: 10px;
 }
+#groupPageContent div::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 7px;
+  }
+#groupPageContent div::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: rgba(0, 0, 0, .5);
+    -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, .5);
+  }
+#groupPageContent div {
+    overflow-y: scroll;
+   }
 
 #photoErr {
     grid-column: 1;
@@ -93,6 +105,7 @@
     grid-column: 4;
     grid-row: 7/11;
     border: 2px solid black;
+    max-height: 400px;
 }
 
 #albumsGroup:hover{
@@ -104,4 +117,13 @@
 }
 .link:hover {
     color: red;
+}
+
+#singlesGroup {
+    height: 400px;
+}
+
+Link > li{
+    color: blue; 
+
 }

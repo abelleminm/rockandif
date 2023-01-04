@@ -74,8 +74,8 @@
 }
 
 #singlesAlbumItemLinked{
-    color: black;
-    text-decoration: none;
+    color: blue;
+    text-decoration: underline;
 }
 
 #singlesAlbumItemLinked:hover{
