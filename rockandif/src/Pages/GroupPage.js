@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import Header from '../Components/Header';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import './GroupPage.css';
 import Photo from '../Components/Photo.js'
 class GroupPage extends React.Component {
@@ -25,7 +25,7 @@ class GroupPage extends React.Component {
     'PREFIX skos: <http://www.w3.org/2004/02/skos/core#>\n ';
 
     this.reqBand_beg = 'SELECT DISTINCT ?g ?name ?abstract ?year ?origin  \
-    (GROUP_CONCAT(DISTINCT ?genreName; separator=" ; ") AS ?genre) (GROUP_CONCAT(DISTINCT ?nameMember; separator=" ; ") AS ?members)  WHERE {\
+    (GROUP_CONCAT(DISTINCT ?genreName; separator=" ; ") AS ?genre) (GROUP_CONCAT(DISTINCT ?nameMember; separator=" ; ") AS ?members) (GROUP_CONCAT(DISTINCT ?nameOldMember; separator=" ; ") AS ?oldmembers)   (GROUP_CONCAT(DISTINCT ?l; separator=" ; ") AS ?label)  WHERE {\
       ?g a dbo:Band; dbo:genre ?genre.\
       ?genre foaf:name ?genreName.\
       ?g foaf:name ?name.\
@@ -33,10 +33,15 @@ class GroupPage extends React.Component {
       ?g dbo:activeYearsStartYear ?year. \
       ?g dbp:origin ?origin \
       OPTIONAL {?g dbp:currentMembers ?nameMember}\
+      OPTIONAL {?g dbp:pastMembers ?nameOldMember}\
+      OPTIONAL { ?g dbo:recordLabel ?l }.\
       FILTER(langMatches(lang(?name),"en") && regex(?genre, "[Rr]ock") \
       && langMatches(lang(?abstract),"en") && regex(lcase(str(?name)), "^';
       
     this.reqBand_end = '$"))} ORDER BY ASC(?name) LIMIT 10';
+
+
+    
 
 
   }
@@ -87,7 +92,7 @@ class GroupPage extends React.Component {
       FILTER(langMatches(lang(?abstract),"EN"))\
       FILTER(regex(lcase(str(?artist)),"'+bandName.toLowerCase()+'"))\
       }\
-      LIMIT 10';
+ ';
       var request = this.prefixRq + reqAlbum ; 
       console.log("request for albums:  " + reqAlbum);
       var url_base = "http://dbpedia.org/sparql";
@@ -113,9 +118,8 @@ class GroupPage extends React.Component {
     xmlhttp.open("GET", url, true);
     xmlhttp.send();
   }
-
-  findSingles(bandName){
-
+  replaceLinkToName(link){
+    return link.replace("http://dbpedia.org/resource/", ""); 
   }
   render() {
   return (
@@ -124,64 +128,70 @@ class GroupPage extends React.Component {
       {this.state.filteredResponse.length != 0 
       &&(
         <div id="groupPageContent">
-          <Photo nom={this.props.params.nom} fromPage={window.location.pathname}/>
-          <div id="nomGroupe">{this.state.nom}</div>
-          <div id="dateGroup"></div>
+          <div id="image"><Photo nom={this.props.params.nom} fromPage={window.location.pathname}/></div>
+          <div id="nomGroupe"><p>{this.state.nom}</p></div>
               <div id="dateGroup">
-              <h3>Date création - Date fin</h3>
+              <h3>Date création: </h3>
               <p>
                 {this.state.filteredResponse[0].year.value}
               </p>
             </div>
             <div id="origineGroup">
-                {this.state.filteredResponse[0].origin.value}
+              <h3>Origine: </h3>
+                {this.state.filteredResponse[0].origin.value.replace("http://dbpedia.org/resource/", "")}
             </div>
 
           <div id="descriptionGroup">
             <h3>Description Group</h3>
-            <p>
-              {this.state.filteredResponse[0].abstract.value}
-            </p>
+            
+              <p>{this.state.filteredResponse[0].abstract.value}</p>
+            
           </div>
 
           <div id="membresGroup">
            <h3>Members</h3>
            <ul>
+            <h4>current Members:</h4>
             {this.state.filteredResponse[0].members.value.split(';').map((member, index) => {
              return(
               <div>
               {  member.includes("*") &&  member.split("*").map((etoileMember, etoileIndex) => {
                     console.log("splitted - index:" + etoileIndex + " => "  + etoileMember); 
+                    etoileMember.replace("http://dbpedia.org/resource/", ""); 
                     if(etoileMember !== " " && etoileMember !== "" )
-                      return(                
-                        <li key = {etoileIndex}>
-                        {etoileMember}
-                        </li>
-                      )
-                    
-                     
+                      return(    
+                        <a key = {etoileIndex} className= "link"href= {"/person/" + etoileMember}><p>{etoileMember}</p></a>            
+                      )     
                   })
-              // in some cases we have a string containing members with a '*' between them straight from the result of dbpedia.
-                // if(){
-                //   console.log("************** inside the * member case");
-
-                //   // return(                
-                  
-                //   // );
-                  
-                // }
-                // else {
-                 
-                // } 
               }
               {! member.includes("*") && 
-                <li key = {index}>
-                {member}
-                </li>
+                <a key = {index} className= "link"href= {"/person/" + member.replace("http://dbpedia.org/resource/", "")}><p>{member.replace("http://dbpedia.org/resource/", "")}</p></a>            
               }
                 </div>
              ); 
             })}
+            </ul>
+            <ul>
+              {this.state.filteredResponse[0].oldmembers.value != null &&
+                <h4> old member: </h4>
+              }
+              {this.state.filteredResponse[0].oldmembers.value.split(";").map((member, index) => {
+                             return(
+                              <div>
+                              { member.includes("*") &&  member.split("*").map((etoileMember, etoileIndex) => {
+                                    console.log("splitted - index:" + etoileIndex + " => "  + etoileMember); 
+                                    if(etoileMember !== " " && etoileMember !== "" )
+                                      return(                
+                                        <a key = {etoileIndex} className= "link"href= {"/person/" + etoileMember.replace("http://dbpedia.org/resource/", "")}><p>{etoileMember.replace("http://dbpedia.org/resource/", "")}</p></a>            
+                                      )     
+                                  })
+                              }
+                              {! member.includes("*") && 
+                                <a key = {index} className= "link"href= {"/person/" + member.replace("http://dbpedia.org/resource/", "")}><p>{member.replace("http://dbpedia.org/resource/", "")}</p></a>            
+                              }
+                                </div>
+                             );
+              })}
             </ul>
           </div>
           <div id="styleGroup">
@@ -194,19 +204,86 @@ class GroupPage extends React.Component {
               ); 
             })}     
           </div>
-          
           <div id="singlesGroup">
-            <h3>Singles</h3>
+            <h3 id="singlesAlbumTitle">Singles</h3>
+            <ul id="singlesAlbumList">
+              {this.state.filteredAlbumResponse.map((item)=> {
+              if(item.titles != null) {
+                var titles = item.titles.value.split("*");
+                var titlesLink = item.titlesLink.value.split("*");
+                //trier les titres en mettant url en premier
+                titles.sort(function(a, b) {
+                  if(a.includes("dbpedia.org")) {
+                    return -1;
+                  } else {
+                    return 1;
+                  }
+                });
+                //count number of url in titles
+                var count = 0;
+                for(var i = 0; i < titles.length; i++) {
+                  if(titles[i].includes("dbpedia.org")) {
+                    count++;
+                  }
+                }
+                //delete url from titles
+                for(var i = 0; i < count; i++) {
+                  titles.shift();
+                }
+                //delete title from titles that are in titlesLink
+                for(var i = 0; i < titlesLink.length; i++) {
+                  for(var j = 0; j < titles.length; j++) {
+                    if(titlesLink[i] == titles[j]) {
+                      titles.splice(j, 1);
+                    }
+                  }
+                }
+                return (
+                  <div>
+                      {titles.map((title)=> {
+                        return (
+                          <li id="singlesAlbumItem">{title}</li>
+                        )
+                      })}
+                      {titlesLink.map((title)=> {
+                        var linkSingle = "/single/"+ this.props.params.nom +"/"+ item.name.value+"/"+title;
+                        return (
+                          <Link to={linkSingle}>
+                            <li className="li"id="singlesAlbumItemLinked">{title}</li>
+                          </Link>
+                        )
+                      })}
+                  </div>
+                )
+              } else {
+                return (
+                    <p id="singlesAlbum">No singles</p>
+                )
+              }
+            })}
+          </ul>
+            </div>
+          <div id="labelGroup">
+            <h3>Label</h3>
+
+              {this.state.filteredResponse[0].label.value.split(';').map((item, index) => {
+                return(
+                  
+                  <p key={index}>{item.replace("http://dbpedia.org/resource/", "")}</p>
+                );
+              })}
+
           </div>
-          <div id="labelGroup">Label</div>
           <div id="albumsGroup">
-            <h3>Albums:</h3>
+            <h3>Album</h3>
+              <div>
           {this.state.filteredAlbumResponse.map((item, index) => {
             return(
             <a key = {index} className= "link"href= {"/album/" + this.props.params.nom + "/" + item.name.value}><p>{item.name.value}</p></a>
 
             ); 
           })}
+            </div>
           </div>
       </div> 
       )
