@@ -25,7 +25,7 @@ class GroupPage extends React.Component {
     'PREFIX skos: <http://www.w3.org/2004/02/skos/core#>\n ';
 
     this.reqBand_beg = 'SELECT DISTINCT ?g ?name ?abstract ?year ?origin  \
-    (GROUP_CONCAT(DISTINCT ?genreName; separator=" ; ") AS ?genre) (GROUP_CONCAT(DISTINCT ?nameMember; separator=" ; ") AS ?members) (GROUP_CONCAT(DISTINCT ?nameOldMember; separator=" ; ") AS ?oldmembers)  WHERE {\
+    (GROUP_CONCAT(DISTINCT ?genreName; separator=" ; ") AS ?genre) (GROUP_CONCAT(DISTINCT ?nameMember; separator=" ; ") AS ?members) (GROUP_CONCAT(DISTINCT ?nameOldMember; separator=" ; ") AS ?oldmembers)   (GROUP_CONCAT(DISTINCT ?l; separator=" ; ") AS ?label)  WHERE {\
       ?g a dbo:Band; dbo:genre ?genre.\
       ?genre foaf:name ?genreName.\
       ?g foaf:name ?name.\
@@ -34,6 +34,7 @@ class GroupPage extends React.Component {
       ?g dbp:origin ?origin \
       OPTIONAL {?g dbp:currentMembers ?nameMember}\
       OPTIONAL {?g dbp:pastMembers ?nameOldMember}\
+      OPTIONAL { ?g dbo:recordLabel ?l }.\
       FILTER(langMatches(lang(?name),"en") && regex(?genre, "[Rr]ock") \
       && langMatches(lang(?abstract),"en") && regex(lcase(str(?name)), "^';
       
@@ -117,9 +118,8 @@ class GroupPage extends React.Component {
     xmlhttp.open("GET", url, true);
     xmlhttp.send();
   }
-
-  findSingles(bandName){
-
+  replaceLinkToName(link){
+    return link.replace("http://dbpedia.org/resource/", ""); 
   }
   render() {
   return (
@@ -138,14 +138,14 @@ class GroupPage extends React.Component {
             </div>
             <div id="origineGroup">
               <h3>Origine: </h3>
-                {this.state.filteredResponse[0].origin.value}
+                {this.state.filteredResponse[0].origin.value.replace("http://dbpedia.org/resource/", "")}
             </div>
 
           <div id="descriptionGroup">
             <h3>Description Group</h3>
-            <p>
-              {this.state.filteredResponse[0].abstract.value}
-            </p>
+            
+              <p>{this.state.filteredResponse[0].abstract.value}</p>
+            
           </div>
 
           <div id="membresGroup">
@@ -157,37 +157,24 @@ class GroupPage extends React.Component {
               <div>
               {  member.includes("*") &&  member.split("*").map((etoileMember, etoileIndex) => {
                     console.log("splitted - index:" + etoileIndex + " => "  + etoileMember); 
+                    etoileMember.replace("http://dbpedia.org/resource/", ""); 
                     if(etoileMember !== " " && etoileMember !== "" )
-                      return(                
-                        <li key = {etoileIndex}>
-                        {etoileMember}
-                        </li>
+                      return(    
+                        <a key = {etoileIndex} className= "link"href= {"/person/" + etoileMember}><p>{etoileMember}</p></a>            
                       )     
                   })
-              // in some cases we have a string containing members with a '*' between them straight from the result of dbpedia.
-                // if(){
-                //   console.log("************** inside the * member case");
-
-                //   // return(                
-                  
-                //   // );
-                  
-                // }
-                // else {
-                 
-                // } 
               }
               {! member.includes("*") && 
-                <li key = {index}>
-                {member}
-                </li>
+                <a key = {index} className= "link"href= {"/person/" + member.replace("http://dbpedia.org/resource/", "")}><p>{member.replace("http://dbpedia.org/resource/", "")}</p></a>            
               }
                 </div>
              ); 
             })}
             </ul>
             <ul>
-              <h4> old member: </h4>  
+              {this.state.filteredResponse[0].oldmembers.value != null &&
+                <h4> old member: </h4>
+              }
               {this.state.filteredResponse[0].oldmembers.value.split(";").map((member, index) => {
                              return(
                               <div>
@@ -195,28 +182,12 @@ class GroupPage extends React.Component {
                                     console.log("splitted - index:" + etoileIndex + " => "  + etoileMember); 
                                     if(etoileMember !== " " && etoileMember !== "" )
                                       return(                
-                                        <li key = {etoileIndex}>
-                                        {etoileMember}
-                                        </li>
+                                        <a key = {etoileIndex} className= "link"href= {"/person/" + etoileMember.replace("http://dbpedia.org/resource/", "")}><p>{etoileMember.replace("http://dbpedia.org/resource/", "")}</p></a>            
                                       )     
                                   })
-                              // in some cases we have a string containing members with a '*' between them straight from the result of dbpedia.
-                                // if(){
-                                //   console.log("************** inside the * member case");
-                
-                                //   // return(                
-                                  
-                                //   // );
-                                  
-                                // }
-                                // else {
-                                 
-                                // } 
                               }
                               {! member.includes("*") && 
-                                <li key = {index}>
-                                {member}
-                                </li>
+                                <a key = {index} className= "link"href= {"/person/" + member.replace("http://dbpedia.org/resource/", "")}><p>{member.replace("http://dbpedia.org/resource/", "")}</p></a>            
                               }
                                 </div>
                              );
@@ -292,15 +263,27 @@ class GroupPage extends React.Component {
             })}
           </ul>
             </div>
-          <div id="labelGroup">Label</div>
+          <div id="labelGroup">
+            <h3>Label</h3>
+
+              {this.state.filteredResponse[0].label.value.split(';').map((item, index) => {
+                return(
+                  
+                  <p key={index}>{item.replace("http://dbpedia.org/resource/", "")}</p>
+                );
+              })}
+
+          </div>
           <div id="albumsGroup">
-            <h3>Albums:</h3>
+            <h3>Album</h3>
+              <div>
           {this.state.filteredAlbumResponse.map((item, index) => {
             return(
             <a key = {index} className= "link"href= {"/album/" + this.props.params.nom + "/" + item.name.value}><p>{item.name.value}</p></a>
 
             ); 
           })}
+            </div>
           </div>
       </div> 
       )
