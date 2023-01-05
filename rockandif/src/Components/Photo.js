@@ -7,13 +7,15 @@ function Photo({ nom, fromPage }) {
   let chooseReq;
   if(fromPage.toString().includes("person/")) {
     chooseReq = 1; // on cherche une photo de quelqu'un = 1
-  } if(fromPage.toString().includes("single/")) {
+  } else if(fromPage.toString().includes("single/")) {
     chooseReq = 2; // on cherche la cover d'un single = 2
-  } if(fromPage.toString().includes("album/")) {
+  } else if(fromPage.toString().includes("album/")) {
     chooseReq = 3; // on cherche la cover d'un album = 3
   } else {
     chooseReq = 0; // pour un groupe (groupCard ou Group) = 0
   }
+
+  console.log(chooseReq);
 
   useEffect(() => {
     sendRequest(nom, chooseReq).then(res => { 
