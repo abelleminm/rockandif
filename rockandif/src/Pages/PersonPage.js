@@ -8,6 +8,7 @@ import FormerGroups from '../Components/FormerGroups';
 import Partners from '../Components/Partners';
 import Spouses from '../Components/Spouses';
 import Spouses2 from '../Components/Spouses2';
+import Singles from '../Components/Singles';
 
 function PersonPage() {
   const [filteredResponse, setFilteredResponse] = useState([]);
@@ -29,11 +30,16 @@ function PersonPage() {
     'SELECT ?p ?abstract ?name ?bname ?bd ?bp ?btown ?death ?deathtown ?dtown\
      (GROUP_CONCAT(DISTINCT ?band ; separator="*") AS ?bands) (GROUP_CONCAT(DISTINCT ?formerband ; separator="*") AS ?formerbands)\
       (GROUP_CONCAT(DISTINCT ?partner ; separator="*") AS ?partners) (GROUP_CONCAT(DISTINCT ?spouse ; separator="*") AS ?spouses)\
-      (GROUP_CONCAT(DISTINCT ?spouse2 ; separator="*") AS ?spouses2) (GROUP_CONCAT(DISTINCT ?single ; separator="*") AS ?singles) WHERE {\
+      (GROUP_CONCAT(DISTINCT ?spouse2 ; separator="*") AS ?spouses2) (GROUP_CONCAT(DISTINCT ?single ; separator="*") AS ?singles)\
+      (GROUP_CONCAT(DISTINCT ?single2 ; separator="*") AS ?singles2)WHERE {\
     ?p a dbo:MusicalArtist; rdfs:label ?name; dbo:abstract ?abstract; dbp:birthDate ?bd.\
     OPTIONAL {\
       ?single1 dbo:artist ?p.\
       ?single1 dbp:name ?single.\
+    }\
+    OPTIONAL {\
+      ?single3 dbo:artist ?p.\
+      ?single3 foaf:name ?single2.\
     }\
     OPTIONAL {\
       ?p dbp:partner ?partner.\
@@ -209,23 +215,32 @@ function PersonPage() {
             )
           })}
           {filteredResponse.map((item)=> {
-            if(item.singles.value != "")
-            {
-              var singles = item.singles.value.split("*");
+                  var singles = item.singles;
+                  var singles2 = item.singles2;
+                  console.log(singles);
+                  if(singles.value !="")
+                  {
+                    singles = singles.value.split("*");
+                  }
+                  if(singles2.value !="")
+                  {
+                    singles2 = singles2.value.split("*");
+                  }
+                  for(var i = 0; i < singles.length; i++) {
+                      for(var j = 0; j < singles2.length; j++) {
+                        if(singles[i] == singles2[j]) {
+                          singles2.splice(j, 1);
+                        }
+                      }
+                  }
               return(
                 <div id="singlesPerson">
                 <h3 id="singlesTitle">Solo singles and albums</h3>
-                <ul id="singlesList">
-                {singles.map((single)=> {
-                  return(
-                    <li id="singlesItem">{single}</li>
-                  )
-                })}
-                </ul>
+                <Singles singles={singles}></Singles>
+                <Singles singles={singles2}></Singles>
                 </div>
               )
-            }
-            return(<div id="singlesPerson">Solo singles and albums</div>);
+
           })}
         </div>
       )}      
