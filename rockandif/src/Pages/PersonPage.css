@@ -37,15 +37,21 @@
     font-size: large;
 }
 
-#nomNaissancePerson{
+#naissancePerson{
     grid-column: 1;
     grid-row: 9;
+}
+
+#nomNaissancePerson{
     font-style: italic;
 }
 
-#datePerson{
+#viePerson{
     grid-column: 1;
     grid-row: 10;
+}
+
+#lifeInfos{
     font-style: italic;
 }
 
@@ -56,7 +62,7 @@
 
 #descriptionPerson{
     grid-column: 2/5;
-    grid-row: 1/6;
+    grid-row: 1/8;
     border: 2px solid black;
 }
 
@@ -64,19 +70,9 @@
     box-shadow: 5px 5px 5px #888888;
 }
 
-#viePerson{
-    grid-column: 2;
-    grid-row: 6/12;
-    border: 2px solid black;
-}
-
-#viePerson:hover{
-    box-shadow: 5px 5px 5px #888888;
-}
-
 #bandsDiv{
-    grid-column: 3;
-    grid-row: 6/10;
+    grid-column: 2;
+    grid-row: 8/12;
     border: 2px solid black;
 }
 
@@ -85,8 +81,8 @@
 }
 
 #singlesPerson{
-    grid-column: 4;
-    grid-row: 6/10;
+    grid-column: 3;
+    grid-row: 8/12;
     border: 2px solid black;
 }
 
@@ -95,8 +91,8 @@
 }
 
 #partnersPerson{
-    grid-column: 3/5;
-    grid-row: 10/12;
+    grid-column: 4;
+    grid-row: 8/12;
     border: 2px solid black;
 }
 

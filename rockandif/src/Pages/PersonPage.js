@@ -130,6 +130,8 @@ function PersonPage() {
               <text id="nomPerson">{item.name.value}</text>
             )
           })}
+          <div id="naissancePerson">
+          <h4 id="titreNaissancePerson">Birthname :</h4>
           {filteredResponse.map((item)=>{
             if(item.bname != null) {
               return(
@@ -138,15 +140,17 @@ function PersonPage() {
             }
             else{
               return(
-                <text id="nomNaissancePerson">Unknown BirthName</text>
+                <text id="nomNaissancePerson">Unknown</text>
               )  
             }
           })}
-          <text id="datePerson">Date début activité - Date fin activité</text>
-          <text id="nationalitePerson">Nationalité</text>
+          </div>
           {filteredResponse.map((item)=>{
             return(
-              <text id="descriptionPerson">{item.abstract.value}</text>
+              <div id="descriptionPerson">
+              <h3 id="titreDescriptionPerson">Description</h3>
+              <text id="textDescriptionPerson">{item.abstract.value}</text>
+              </div>
             )
           })}
           {filteredResponse.map((item)=>{
@@ -165,20 +169,20 @@ function PersonPage() {
               birthTown = " in "+item.bp.value;
             }
             if(item.death != null){
-              var lifeDeath = item.name.value+" was born on "+item.bd.value+birthTown+" and died on "+item.death.value+deathTown;
+              var lifeDeath = item.name.value+" was born on the "+item.bd.value+birthTown+" and died on the "+item.death.value+deathTown;
               return(
                 <div id="viePerson">
-                  <h3>{item.bd.value} - {item.death.value}</h3>
-                  <text>{lifeDeath}</text>
+                  <h4>Birth and Death Infos :</h4>
+                  <text id="lifeInfos">{lifeDeath}.</text>
                 </div>
               )
             }
             else{
-              var life = item.name.value+" was born on "+item.bd.value+birthTown;
+              var life = item.name.value+" was born on the "+item.bd.value+birthTown;
               return(
                 <div id="viePerson">
-                  <h3>{item.bd.value} - </h3>
-                  <text>{life}</text>
+                  <h4>Birth Infos :</h4>
+                  <text id="lifeInfos">{life}.</text>
                 </div>
               )
             }
@@ -236,8 +240,10 @@ function PersonPage() {
               return(
                 <div id="singlesPerson">
                 <h3 id="singlesTitle">Solo singles and albums</h3>
+                <ul id="singlesList">
                 <Singles singles={singles}></Singles>
                 <Singles singles={singles2}></Singles>
+                </ul>
                 </div>
               )
 
