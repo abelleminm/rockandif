@@ -1,7 +1,7 @@
 #groupPageContent {
     display: grid;
     grid-template-columns: repeat(9, 1fr); 
-    grid-template-rows: 220px 0% 5% 7% 9% 1% 20% 1% 20%;
+    grid-template-rows: 220px 0% 5% 9% 9% 1% 20% 1% 20%;
     grid-gap: 5px;
     padding: 10px;
     background-color: #C9B7AD;
