@@ -16,6 +16,10 @@ function SearchResultsPage() {
     titre = "Search results for the year " + wordEntered; 
   } else if (type === "person") {
     titre = "Search results for the musician " + wordEntered;
+  } else if (type === "album") {
+    titre = "Search results for the album " + wordEntered;
+  } else if (type === "single") {
+    titre = "Search results for the single " + wordEntered;
   }
   var pageNumber = useParams().number;
   var limit = 20;
@@ -53,6 +57,20 @@ function SearchResultsPage() {
     FILTER(regex(lcase(str(?name)), "';
   const reqPerson_end = '.*"))}   ORDER BY ASC(?name) OFFSET '+offset +' LIMIT '+limit;
 
+  const reqAlbum_beg = 'SELECT DISTINCT ?g ?name WHERE {\
+    ?g a dbo:Album; dbo:genre ?genre.\
+    ?g foaf:name ?name.\
+    FILTER(langMatches(lang(?name),"en") && regex(?genre, "[Rr]ock") && strlen(?name)>0)\
+    FILTER(regex(lcase(str(?name)), "';
+  const reqAlbum_end = '.*"))}   ORDER BY ASC(?name) OFFSET '+offset +' LIMIT '+limit;
+
+  const reqSingle_beg = 'SELECT DISTINCT ?g ?name WHERE {\
+    ?g a dbo:Song; dbo:genre ?genre.\
+    ?g foaf:name ?name.\
+    FILTER(langMatches(lang(?name),"en") && regex(?genre, "[Rr]ock") && strlen(?name)>0)\
+    FILTER(regex(lcase(str(?name)), "';
+  const reqSingle_end = '.*"))}   ORDER BY ASC(?name) OFFSET '+offset +' LIMIT '+limit;
+
     const defineRequest = (typeRe, textRe) => {
     let request = "";
     switch (typeRe) {
@@ -65,6 +83,12 @@ function SearchResultsPage() {
       case "person":
         request = prefixRq + reqPerson_beg + textRe + reqPerson_end;
         break;        
+      case "album":
+        request = prefixRq + reqAlbum_beg + textRe + reqAlbum_end;
+        break;
+      case "single":
+        request = prefixRq + reqSingle_beg + textRe + reqSingle_end;
+        break;
       default:
         request = prefixRq + reqBand_beg + textRe + reqBand_end;
         break;

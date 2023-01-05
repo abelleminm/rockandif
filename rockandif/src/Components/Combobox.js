@@ -17,6 +17,8 @@ function Combobox({setFilter}) {
                     <option value="single">Single</option>*/}
                     <option value="person">Member of a band</option> 
                     <option value="date">Date of creation</option>
+                    <option value="album">Album</option>
+                    <option value="single">Single</option>
                 </select>
                 <span class="focus"></span>
             </div>
