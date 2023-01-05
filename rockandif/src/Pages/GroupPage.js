@@ -131,18 +131,18 @@ class GroupPage extends React.Component {
           <div id="image"><Photo nom={this.props.params.nom} fromPage={window.location.pathname}/></div>
           <div id="nomGroupe"><p>{this.state.nom}</p></div>
               <div id="dateGroup">
-              <h3>Date création: </h3>
+              <h3>Start year: </h3>
               <p>
                 {this.state.filteredResponse[0].year.value}
               </p>
             </div>
             <div id="origineGroup">
-              <h3>Origine: </h3>
+              <h3>Origin: </h3>
                 {this.state.filteredResponse[0].origin.value.replace("http://dbpedia.org/resource/", "")}
             </div>
 
           <div id="descriptionGroup">
-            <h3>Description Group</h3>
+            <h3>Group Description</h3>
             
               <p>{this.state.filteredResponse[0].abstract.value}</p>
             
@@ -264,7 +264,7 @@ class GroupPage extends React.Component {
           </ul>
             </div>
           <div id="labelGroup">
-            <h3>Label</h3>
+            <h3>Labels</h3>
 
               {this.state.filteredResponse[0].label.value.split(';').map((item, index) => {
                 return(
@@ -275,7 +275,7 @@ class GroupPage extends React.Component {
 
           </div>
           <div id="albumsGroup">
-            <h3>Album</h3>
+            <h3>Albums</h3>
               <div>
           {this.state.filteredAlbumResponse.map((item, index) => {
             return(
