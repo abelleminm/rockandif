@@ -6,13 +6,25 @@
     padding: 10px;
 }
 
-#coverAlbum {
+#photoErr {
     grid-column: 1;
     grid-row: 1/8;
     background-image: url('../Images/Logo.PNG');
 }
 
-#coverAlbum:hover {
+#photoErr:hover {
+    box-shadow: 5px 5px 5px #888888;
+    /*zoom sur background image*/
+    transform: scale(1.05);
+}
+
+#photo {
+    width: 80%;
+    height: auto;
+    margin: auto;
+}
+
+#photo:hover {
     box-shadow: 5px 5px 5px #888888;
     /*zoom sur background image*/
     transform: scale(1.05);

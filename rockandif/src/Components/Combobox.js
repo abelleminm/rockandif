@@ -8,17 +8,17 @@ function Combobox({setFilter}) {
     };
 
     return (   
-        <div id="wrapper" class="myWrapper">
-            <label for="combobox">Filter : </label>
+        <div id="wrapper" className="myWrapper">
+            <label htmlFor="combobox">Filter : </label>
             <div id="combobox" className="custom-select">
                 <select id="combo" onChange={changeFilter}>
                     <option value="band">Rock Band</option>
                     {/* <option value="album">Album</option>
-                    <option value="single">Single</option>
-                    <option value="member">Member of a band</option> */}
+                    <option value="single">Single</option>*/}
+                    <option value="person">Member of a band</option> 
                     <option value="date">Date of creation</option>
                 </select>
-                <span class="focus"></span>
+                <span className="focus"></span>
             </div>
         </div>
     );

@@ -21,7 +21,7 @@ function App() {
         <Route path="person/:nom" element={<PersonPage/>} />
         <Route path="single/:band/:album/:title" element={<SinglePage/>} />
         <Route path="french-groups" element={<FrenchGroupsPage />} />
-        <Route path="help" element={<HelpPage />} />
+        <Route path="help-page" element={<HelpPage />} />
         <Route path="moroccan-groups" element={<MoroccanGroupsPage />} />
         <Route path="search/:type/:text/:number" element={<SearchResultsPage />} />
         <Route path="*" element={<PageNotFound />} />

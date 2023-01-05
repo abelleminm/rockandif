@@ -10,14 +10,14 @@ function Header({ titre }) {
     const [over, setOver] = useState(false);
     return (
         <header>
-            <div class="box2d" id="header-menu">
+            <div className="box2d" id="header-menu">
                 <HeaderMenu/>
             </div>
-           <h1 class="box2d" id="titre" >{titre}</h1>
+           <h1 className="box2d" id="titre" >{titre}</h1>
 
 
 <div id="home-link">
-    <Link class="box2d" onMouseOver={() => setOver(true)}
+    <Link className="box2d" onMouseOver={() => setOver(true)}
                 onMouseOut={() => setOver(false)} to="/"><img src={over ? logo_animated : logo} alt="Logo" /></Link>
 </div>
      

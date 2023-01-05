@@ -6,13 +6,13 @@
     margin-top:7%;
 }
 
-text {
+.instruction {
     font-style: italic;
     font-size: 150%;
     color: gray;
 }
 
-text:hover{
+.instruction:hover{
     font-size: 155%;
 }
 
