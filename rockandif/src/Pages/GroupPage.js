@@ -160,12 +160,12 @@ class GroupPage extends React.Component {
                     etoileMember.replace("http://dbpedia.org/resource/", ""); 
                     if(etoileMember !== " " && etoileMember !== "" )
                       return(    
-                        <a key = {etoileIndex} className= "link"href= {"/person/" + etoileMember}><p>{etoileMember}</p></a>            
+                        <a key = {etoileIndex} className= "link"href= {"/person/" + etoileMember.replace(" ", "")}><p>{etoileMember.replace(" ", "")}</p></a>            
                       )     
                   })
               }
               {! member.includes("*") && 
-                <a key = {index} className= "link"href= {"/person/" + member.replace("http://dbpedia.org/resource/", "")}><p>{member.replace("http://dbpedia.org/resource/", "")}</p></a>            
+                <a key = {index} className= "link"href= {"/person/" + member.replace("http://dbpedia.org/resource/", "").replace(" ", "")}><p>{member.replace("http://dbpedia.org/resource/", "").replace(" ", "")}</p></a>            
               }
                 </div>
              ); 
@@ -182,12 +182,12 @@ class GroupPage extends React.Component {
                                     console.log("splitted - index:" + etoileIndex + " => "  + etoileMember); 
                                     if(etoileMember !== " " && etoileMember !== "" )
                                       return(                
-                                        <a key = {etoileIndex} className= "link"href= {"/person/" + etoileMember.replace("http://dbpedia.org/resource/", "")}><p>{etoileMember.replace("http://dbpedia.org/resource/", "")}</p></a>            
+                                        <a key = {etoileIndex} className= "link"href= {"/person/" + etoileMember.replace("http://dbpedia.org/resource/", "").replace(" ", "")}><p>{etoileMember.replace("http://dbpedia.org/resource/", "").replace(" ", "")}</p></a>            
                                       )     
                                   })
                               }
                               {! member.includes("*") && 
-                                <a key = {index} className= "link"href= {"/person/" + member.replace("http://dbpedia.org/resource/", "")}><p>{member.replace("http://dbpedia.org/resource/", "")}</p></a>            
+                                <a key = {index} className= "link"href= {"/person/" + member.replace("http://dbpedia.org/resource/", "").replace(" ", "")}><p>{member.replace("http://dbpedia.org/resource/", "").replace(" ", "")}</p></a>            
                               }
                                 </div>
                              );
