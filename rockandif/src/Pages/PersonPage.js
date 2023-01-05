@@ -86,7 +86,7 @@ function PersonPage() {
     FILTER(langMatches(lang(?bname),"EN"))\
     }\
     FILTER(langMatches(lang(?abstract),"EN") && langMatches(lang(?name),"EN"))\
-    FILTER (regex(lcase(str(?name)), "'+nom.toLowerCase()+'"))\
+    FILTER (regex(?name, "'+nom+'$") && regex(?name, "^'+nom+'"))\
     }';
 
     let request = prefixRq + reqArtist;
