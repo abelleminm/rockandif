@@ -32,14 +32,14 @@
 
 #nomPerson{
     grid-column: 1;
-    grid-row: 8;
+    grid-row: 6;
     font-weight: bold;
     font-size: large;
 }
 
 #naissancePerson{
     grid-column: 1;
-    grid-row: 9;
+    grid-row: 7;
 }
 
 #nomNaissancePerson{
@@ -48,16 +48,11 @@
 
 #viePerson{
     grid-column: 1;
-    grid-row: 10;
+    grid-row: 8;
 }
 
 #lifeInfos{
     font-style: italic;
-}
-
-#nationalitePerson{
-    grid-column: 1;
-    grid-row: 11;
 }
 
 #descriptionPerson{
