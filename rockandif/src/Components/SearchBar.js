@@ -32,6 +32,13 @@ function SearchBar({ placeholder, filter }) {
     FILTER(year(xsd:date(?year))=';
     const reqDate_end = ')}LIMIT 10';
 
+  let reqPerson_beg = 'SELECT DISTINCT ?g ?name ?abstract WHERE {\
+    ?g a dbo:MusicalArtist; dbo:abstract ?abstract.\
+    ?g rdfs:label ?name.\
+    FILTER(langMatches(lang(?name),"en") && regex(?abstract, "[Rr]ock") && strlen(?name)>0 && langMatches(lang(?abstract),"en"))\
+    FILTER(regex(lcase(str(?name)), "';
+  const reqPerson_end = '.*"))}LIMIT 10';
+
   const defineRequest = (filter, word) => {
     let request = "";
     switch (filter) {
@@ -40,6 +47,9 @@ function SearchBar({ placeholder, filter }) {
         break;
       case "date":
         request = prefixRq + reqDate_beg + word + reqDate_end;
+        break;
+      case "person":
+        request = prefixRq + reqPerson_beg + word + reqPerson_end;
         break;
       default:
         request = prefixRq + reqBand_beg + word + reqBand_end;
@@ -52,6 +62,9 @@ function SearchBar({ placeholder, filter }) {
     if(wordEntered.length > 0){
       if(filter === "date"){
         window.location.href = "/search/date/" + wordEntered+"/1";
+      }
+      else if(filter === "person"){
+        window.location.href = "/search/person/" + wordEntered+"/1";
       }else{
         window.location.href = "/search/band/" + wordEntered+"/1";
       }
@@ -66,10 +79,8 @@ function SearchBar({ placeholder, filter }) {
 
   const handleFilter = (event) => {
     let searchWord = event.target.value;
-    console.log("search word : " + searchWord);
     setWordEntered(searchWord);
     searchWord = searchWord.toLowerCase();
-    console.log("search word : " + searchWord);
     sendRequest(searchWord);
   };
 
@@ -84,8 +95,7 @@ function SearchBar({ placeholder, filter }) {
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
           setFilteredResponse(JSON.parse(this.responseText).results.bindings);
-          console.log("filterdResponse: " + filteredResponse);
-          // afficherResultats(filteredRequest);
+          // console.log("filterdResponse: " + filteredResponse);
         }else{
           setFilteredResponse([]);
         }
@@ -122,10 +132,17 @@ function SearchBar({ placeholder, filter }) {
           <div className="dataResult">
             <div className="dataResult-content">
             {filteredResponse.map((item) => {
-              return(
-                <a className="dataItem" href= {"/group/" + item.name.value} target="_blank">
+              if(filter != "person"){
+                return(
+                <a key={item.name.value} className="dataItem" href= {"/group/" + item.name.value} target="_blank">
                 <p>{item.name.value} ({item.year.value})</p>
               </a>)
+              } else {
+                return(
+                  <a key={item.name.value} className="dataItem" href= {"/person/" + item.name.value} target="_blank">
+                  <p>{item.name.value} </p>
+                </a>)               
+              }
             })}
             </div>
           </div>
