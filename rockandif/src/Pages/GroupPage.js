@@ -128,16 +128,16 @@ class GroupPage extends React.Component {
       {this.state.filteredResponse.length != 0 
       &&(
         <div id="groupPageContent">
-          <Photo nom={this.props.params.nom} fromPage={window.location.pathname}/>
-          <div id="nomGroupe">{this.state.nom}</div>
-          <div id="dateGroup"></div>
+          <div id="image"><Photo nom={this.props.params.nom} fromPage={window.location.pathname}/></div>
+          <div id="nomGroupe"><p>{this.state.nom}</p></div>
               <div id="dateGroup">
-              <h3>Date création - Date fin</h3>
+              <h3>Date création: </h3>
               <p>
                 {this.state.filteredResponse[0].year.value}
               </p>
             </div>
             <div id="origineGroup">
+              <h3>Origine: </h3>
                 {this.state.filteredResponse[0].origin.value}
             </div>
 
@@ -151,10 +151,10 @@ class GroupPage extends React.Component {
           <div id="membresGroup">
            <h3>Members</h3>
            <ul>
+            <h4>current Members:</h4>
             {this.state.filteredResponse[0].members.value.split(';').map((member, index) => {
              return(
               <div>
-                <h4>current Members:</h4>
               {  member.includes("*") &&  member.split("*").map((etoileMember, etoileIndex) => {
                     console.log("splitted - index:" + etoileIndex + " => "  + etoileMember); 
                     if(etoileMember !== " " && etoileMember !== "" )
@@ -187,10 +187,10 @@ class GroupPage extends React.Component {
             })}
             </ul>
             <ul>
+              <h4> old member: </h4>  
               {this.state.filteredResponse[0].oldmembers.value.split(";").map((member, index) => {
                              return(
                               <div>
-                                <h4> old member: </h4> 
                               { member.includes("*") &&  member.split("*").map((etoileMember, etoileIndex) => {
                                     console.log("splitted - index:" + etoileIndex + " => "  + etoileMember); 
                                     if(etoileMember !== " " && etoileMember !== "" )
@@ -278,7 +278,7 @@ class GroupPage extends React.Component {
                         var linkSingle = "/single/"+ this.props.params.nom +"/"+ item.name.value+"/"+title;
                         return (
                           <Link to={linkSingle}>
-                            <li id="singlesAlbumItemLinked">{title}</li>
+                            <li className="li"id="singlesAlbumItemLinked">{title}</li>
                           </Link>
                         )
                       })}
