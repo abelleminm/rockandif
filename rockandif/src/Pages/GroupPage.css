@@ -4,7 +4,7 @@
     grid-template-rows: 220px 0% 5% 9% 9% 1% 20% 1% 20%;
     grid-gap: 5px;
     padding: 10px;
-    background-color: #C9B7AD;
+    /* background-color: #C9B7AD; */
 }
 #groupPageContent div::-webkit-scrollbar {
     -webkit-appearance: none;
@@ -22,7 +22,7 @@
    }
 
 #groupPageContent h3 {
-    color: #9F0400
+    color: black
 }
 
 #image{
