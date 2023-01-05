@@ -29,8 +29,12 @@ function PersonPage() {
     'SELECT ?p ?abstract ?name ?bname ?bd ?bp ?btown ?death ?deathtown ?dtown\
      (GROUP_CONCAT(DISTINCT ?band ; separator="*") AS ?bands) (GROUP_CONCAT(DISTINCT ?formerband ; separator="*") AS ?formerbands)\
       (GROUP_CONCAT(DISTINCT ?partner ; separator="*") AS ?partners) (GROUP_CONCAT(DISTINCT ?spouse ; separator="*") AS ?spouses)\
-      (GROUP_CONCAT(DISTINCT ?spouse2 ; separator="*") AS ?spouses2) WHERE {\
+      (GROUP_CONCAT(DISTINCT ?spouse2 ; separator="*") AS ?spouses2) (GROUP_CONCAT(DISTINCT ?single ; separator="*") AS ?singles) WHERE {\
     ?p a dbo:MusicalArtist; rdfs:label ?name; dbo:abstract ?abstract; dbp:birthDate ?bd.\
+    OPTIONAL {\
+      ?single1 dbo:artist ?p.\
+      ?single1 dbp:name ?single.\
+    }\
     OPTIONAL {\
       ?p dbp:partner ?partner.\
     }\
@@ -195,9 +199,6 @@ function PersonPage() {
             )
           })}
           {filteredResponse.map((item)=> {
-            console.log(item.partners);
-            console.log(item.spouses);
-            console.log(item.spouses2);
             return(
               <div id="partnersPerson">
               <h3 id="partnersTitle">Partners</h3>
@@ -207,7 +208,25 @@ function PersonPage() {
               </div>
             )
           })}
-          <text id="singlesPerson">Singles solo</text>
+          {filteredResponse.map((item)=> {
+            if(item.singles.value != "")
+            {
+              var singles = item.singles.value.split("*");
+              return(
+                <div id="singlesPerson">
+                <h3 id="singlesTitle">Solo singles and albums</h3>
+                <ul id="singlesList">
+                {singles.map((single)=> {
+                  return(
+                    <li id="singlesItem">{single}</li>
+                  )
+                })}
+                </ul>
+                </div>
+              )
+            }
+            return(<div id="singlesPerson">Solo singles and albums</div>);
+          })}
         </div>
       )}      
     </div>
