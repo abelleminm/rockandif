@@ -48,7 +48,8 @@ function HeaderMenu() {
                 <MenuItem onClick={() => navigate("/french-groups")}>French groups</MenuItem>
                 <MenuItem onClick={() => navigate("/moroccan-groups")}>Moroccan groups</MenuItem>
                 {/* <MenuItem onClick={easterEgg}>Help</MenuItem> */}
-                </Menu>
+
+            </Menu>
             {gravityScripts}
         </div>
     );
