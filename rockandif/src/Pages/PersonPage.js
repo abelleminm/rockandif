@@ -6,8 +6,6 @@ import Photo from '../Components/Photo';
 import CurrentGroups from '../Components/CurrentGroups';
 import FormerGroups from '../Components/FormerGroups';
 import Partners from '../Components/Partners';
-import Spouses from '../Components/Spouses';
-import Spouses2 from '../Components/Spouses2';
 import Singles from '../Components/Singles';
 
 function PersonPage() {
@@ -209,19 +207,93 @@ function PersonPage() {
             )
           })}
           {filteredResponse.map((item)=> {
+              var partners = item.partners;
+              var spouses = item.spouses;
+              var spouses2 = item.spouses2;
+              if(partners.value !="")
+              {
+                partners = partners.value.split("*");
+              }
+              if(spouses.value !="")
+              {
+                spouses = spouses.value.split("*");
+              }
+              if(spouses2.value !="")
+              {
+                spouses2 = spouses2.value.split("*");
+              }
+
+              for(var i = 0; i < partners.length; i++) {
+                  if(partners[i].includes("dbpedia.org")) {
+                    var index = partners[i].lastIndexOf('/');
+                    var newpartner = partners[i].substring(index+1);
+                    if(newpartner.includes('_')){
+                      newpartner = newpartner.replace('_',' ');
+                    }
+                    partners[i]= newpartner;
+                  }
+              }
+
+              for(var i = 0; i < spouses.length; i++) {
+                if(spouses[i].includes("dbpedia.org")) {
+                  var index2 = spouses[i].lastIndexOf('/');
+                  var newpartner2 = spouses[i].substring(index2+1);
+                  if(newpartner2.includes('_')){
+                    newpartner2 = newpartner2.replace('_',' ');
+                  }
+                  spouses[i]= newpartner2;
+                }
+            }
+
+            for(var i = 0; i < spouses2.length; i++) {
+              if(spouses2[i].includes("dbpedia.org")) {
+                var index3 = spouses2[i].lastIndexOf('/');
+                var newpartner3 = spouses2[i].substring(index3+1);
+                if(newpartner3.includes('_')){
+                  newpartner3 = newpartner3.replace('_',' ');
+                }
+                spouses2[i]= newpartner3;
+              }
+            }
+
+              for(var i = 0; i < partners.length; i++) {
+                  for(var j = 0; j < spouses.length; j++) {
+                    if(partners[i] == spouses[j]) {
+                      spouses.splice(j, 1);
+                    }
+                  }
+              }
+
+              for(var i = 0; i < partners.length; i++) {
+                for(var j = 0; j < spouses2.length; j++) {
+                  if(partners[i] == spouses2[j]) {
+                    spouses2.splice(j, 1);
+                  }
+                }
+              }
+
+              for(var i = 0; i < spouses.length; i++) {
+                for(var j = 0; j < spouses2.length; j++) {
+                  if(spouses[i] == spouses2[j]) {
+                    spouses2.splice(j, 1);
+                  }
+                }
+              }
+
             return(
               <div id="partnersPerson">
               <h3 id="partnersTitle">Partners</h3>
-              <Partners partners={item.partners}></Partners>
-              <Spouses spouses={item.spouses}></Spouses>
-              <Spouses2 spouses2={item.spouses2}></Spouses2>
+              <ul id="partnersList">
+              <Partners partners={partners}></Partners>
+              <Partners partners={spouses}></Partners>
+              <Partners partners={spouses2}></Partners>
+              </ul>
               </div>
             )
           })}
           {filteredResponse.map((item)=> {
                   var singles = item.singles;
                   var singles2 = item.singles2;
-                  console.log(singles);
                   if(singles.value !="")
                   {
                     singles = singles.value.split("*");
