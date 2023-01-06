@@ -1,20 +1,18 @@
 function Partners(props) {
-    var partners = props.partners;
-    if(partners.value !="")
-    {
-      partners = partners.value.split("*");
+  
+  var partners = props.partners;
+  if(partners.value !=""){
     return(
-    <ul id="partnersList">
+    <>
     {partners.map((partner)=> {
       if(partner != ""){
       return(
-      <li id="partnersItem">{partner}</li>
+        <li id="partnersItem">{partner}</li>
       )}
     })}
-    </ul>
+    </>
     )
-    }
-    return;
+  }
 }
 
 export default Partners;
